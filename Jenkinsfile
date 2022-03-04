@@ -31,7 +31,7 @@ pipeline {
                     chmod +x gradlew
                     """
                     sh """
-                    sudo ./gradlew build
+                    ./gradlew build
                     """
                 }
             }
