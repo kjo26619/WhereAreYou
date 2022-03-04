@@ -28,10 +28,10 @@ pipeline {
             steps {
                 dir ('./Backend/way'){
                     sh """
-                    ./gradlew tasks
+                    sudo ./gradlew tasks
                     """
                     sh """
-                    ./gradlew build
+                    sudo ./gradlew build
                     """
                 }
             }
