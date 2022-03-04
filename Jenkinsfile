@@ -28,6 +28,9 @@ pipeline {
             steps {
                 dir ('./Backend/way'){
                     sh """
+                    chmod +x gradlew
+                    """
+                    sh """
                     sudo ./gradlew build
                     """
                 }
