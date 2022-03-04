@@ -28,10 +28,10 @@ pipeline {
             steps {
                 dir ('./Backend/way'){
                     sh """
-                    gradle tasks
+                    ./gradlew tasks
                     """
                     sh """
-                    gradle build
+                    ./gradlew build
                     """
                 }
             }
