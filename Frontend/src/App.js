@@ -1,8 +1,9 @@
 import React from 'react';
-import PropTypes from "prop-types";
+import Header from './components';
 
-function App() {
-  return <div>Hello!</div>
+function App(){
+    // 여기서 route 를 해주고 싶은데 잘 안됨 ㅠㅠ
+    return (<Header/>);
 }
 
 export default App;
