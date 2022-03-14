@@ -1,9 +1,12 @@
-import React from 'react';
-import Header from './components';
+import React, {Component} from 'react';
+import Routes from './Routes';
 
 function App(){
-    // 여기서 route 를 해주고 싶은데 잘 안됨 ㅠㅠ
-    return (<Header/>);
+    return (
+        <div>
+            <Routes/>
+        </div>
+    );
 }
 
 export default App;
