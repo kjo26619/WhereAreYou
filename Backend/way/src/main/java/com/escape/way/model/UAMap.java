@@ -1,5 +1,7 @@
-package com.escape.way;
+package com.escape.way.model;
 
+import com.escape.way.model.Appointment;
+import com.escape.way.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
