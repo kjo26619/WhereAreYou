@@ -2,13 +2,14 @@ import React from 'react';
 
 function Header() {
     const [isLoggedIn, modifier] = React.useState(0);
-    const onClick = ()=>{
+    const onClick = (e)=>{
         console.log("clicked!!")
         modifier(1);
+        console.log(e.target);
     }
     const loginButton = (
         <li>
-            <a>
+        <a href="() => false">
                 <i className="material-icons">vpn_key</i>
             </a>
         </li>
@@ -16,7 +17,7 @@ function Header() {
 
     const logoutButton = (
         <li>
-            <a>
+            <a href="() => false">
                 <i className="material-icons">lock_open</i>
             </a>
         </li>
@@ -25,9 +26,13 @@ function Header() {
     return (
         <nav>
             <div className="nav-wrapper yellow darken-1">
-                <a className="brand-logo center">WAY</a>
+                <a href="() => false" className="brand-logo center">WAY</a>
                 <ul>
-                    <li><a><i className="material-icons">search</i></a></li>
+                    <li>
+                        <a href="() => false">
+                            <i className="material-icons">search</i>
+                        </a>
+                    </li>
                 </ul>
 
                 <div className="right">

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes as Switch, Link } from 'react-ro
 
 import Header from './components/Header';
 import Home from './containers/Home';
-import Login from './containers/Login'
+import Login from './containers/Login';
 
 function Routes(){
     return (
@@ -14,8 +14,8 @@ function Routes(){
                 <li><Link to='/login'>Login</Link></li>   
             </ul> 
             <Switch>
-                <Route exact path='/' component={Home}/>
-                <Route exact path='/login' component={Login}/>
+                <Route exact path='/login' element={<Login/>}/>
+                <Route exact path='/' element={<Home/>}/>
             </Switch>
         </Router>
     );
