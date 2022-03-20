@@ -9,10 +9,6 @@ function Routes(){
     return (
         <Router>
             <Header/>
-            <ul>
-                <li><Link to='/'>Home</Link></li>
-                <li><Link to='/login'>Login</Link></li>   
-            </ul> 
             <Switch>
                 <Route exact path='/login' element={<Login/>}/>
                 <Route exact path='/' element={<Home/>}/>
