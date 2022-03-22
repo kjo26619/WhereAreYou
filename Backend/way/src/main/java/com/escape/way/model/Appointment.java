@@ -20,20 +20,10 @@ public class Appointment implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "appointmentNo")
     private Long appointmentNo;
-
-    @Column(length = 45)
     private String name;
-
-    @Column
     private String placeName;
-
-    @Column
     private float placeX;
-
-    @Column
     private float placeY;
-
-    @Column
     private boolean openToAll;
 
     @OneToMany(mappedBy = "appointment")

@@ -1,9 +1,10 @@
 import React from 'react';
+import {Authentication} from '../components';
 
 function Login(){
     return (
         <div>
-            Login
+            <Authentication />
         </div>
     );
 }
