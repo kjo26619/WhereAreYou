@@ -21,20 +21,13 @@ public class User implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no;
 
-    @Column(length = 45)
+    @Column
     private String name;
-
-    @Column(length = 45)
-    private String id;
-
-    @Column(length = 45)
+    private String userId;
     private String pw;
-
-    @Column
     private float userX;
-
-    @Column
     private float userY;
+    private Long kakaoId;
 
     @OneToMany(mappedBy = "user")
     private List<UAMap> uamaps = new ArrayList<UAMap>();
@@ -55,12 +48,12 @@ public class User implements Serializable{
         this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getPw() {
@@ -93,5 +86,13 @@ public class User implements Serializable{
 
     public void setUamaps(List<UAMap> uamaps) {
         this.uamaps = uamaps;
+    }
+
+    public Long getKakaoId() {
+        return kakaoId;
+    }
+
+    public void setKakaoId(Long kakaoId) {
+        this.kakaoId = kakaoId;
     }
 }
