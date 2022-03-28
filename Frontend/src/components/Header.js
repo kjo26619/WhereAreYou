@@ -48,9 +48,9 @@ function Header() {
     }
     const loginButton = (
         <li>
-            <a>
+            <Link to="/login">
                 <i className="material-icons">vpn_key</i>
-            </a>
+            </Link>
         </li>
     );
 
@@ -68,9 +68,9 @@ function Header() {
                 <Link to="/" className="brand-logo center">WAY</Link>
                 <ul>
                     <li>
-                        <a href="() => false">
+                        <Link to="/write">
                             <i className="material-icons">search</i>
-                        </a>
+                        </Link>
                     </li>
                 </ul>
 
