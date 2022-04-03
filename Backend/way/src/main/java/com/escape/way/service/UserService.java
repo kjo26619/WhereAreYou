@@ -3,17 +3,13 @@ package com.escape.way.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.escape.way.model.Appointment;
 import com.escape.way.model.User;
 import com.escape.way.repository.UserRepository;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
-import static org.springframework.util.StringUtils.*;
 
 @Service
 public class UserService {
@@ -30,8 +26,8 @@ public class UserService {
        return userRepository.existsByUserId(id);
     }
 
-    public User getUser(Long no){
-        return userRepository.findById(no).orElseThrow(() ->
+    public User getUser(Long userNo){
+        return userRepository.findById(userNo).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found user"));
     }
 

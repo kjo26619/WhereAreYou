@@ -18,7 +18,6 @@ public class Appointment implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "appointmentNo")
     private Long appointmentNo;
     private String name;
     private String placeName;

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.escape.way.model.Appointment;
-import com.escape.way.repository.UserRepository;
 import com.escape.way.service.UserService;
 
 import com.escape.way.service.AppointmentService;

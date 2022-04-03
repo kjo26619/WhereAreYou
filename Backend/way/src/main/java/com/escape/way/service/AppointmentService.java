@@ -1,9 +1,7 @@
 package com.escape.way.service;
 
 import com.escape.way.model.Appointment;
-import com.escape.way.model.User;
 import com.escape.way.repository.AppointmentRepository;
-import com.escape.way.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
