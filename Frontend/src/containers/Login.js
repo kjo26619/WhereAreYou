@@ -4,7 +4,7 @@ import {Authentication} from '../components';
 function Login(){
     return (
         <div>
-            <Authentication />
+            <Authentication mode = {true}/>
         </div>
     );
 }

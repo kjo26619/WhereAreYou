@@ -1,9 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes as Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes as Switch } from 'react-router-dom';
 
 import Header from './components/Header';
 import Home from './containers/Home';
 import Login from './containers/Login';
+import Write from './components/Write';
 
 function Routes(){
     return (
@@ -12,6 +13,7 @@ function Routes(){
             <Switch>
                 <Route exact path='/login' element={<Login/>}/>
                 <Route exact path='/' element={<Home/>}/>
+                <Route exact path='/write' element={<Write/>}/>
             </Switch>
         </Router>
     );
