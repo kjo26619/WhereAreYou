@@ -95,4 +95,9 @@ public class User implements Serializable{
     public void setKakaoId(Long kakaoId) {
         this.kakaoId = kakaoId;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
