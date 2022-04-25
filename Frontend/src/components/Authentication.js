@@ -14,7 +14,7 @@ Authentication.defaultProps = {
     onRegister: (id, pw) => { console.log("register function not defined") }
 };
 
-function Authentication({ mode , onLogin}) {
+function Authentication({ mode , onLogin, onRegister}) {
     const [userName, setName] = useState("");
     const [userPW, setPw] = useState("");
 
@@ -63,6 +63,28 @@ function Authentication({ mode , onLogin}) {
         )
     };
 
+    const HandleRegister = (e)=>{
+        onRegister(userName, userPW).then(
+            (result)=>{
+                if(!result){
+                    setName('');
+                    setPw('');
+                }
+            }
+        )
+    };
+
+    const handleKeyPress = (e)=>{
+        if(e.charCode==13) {
+            console.log('enter pressed');
+            if(mode) {
+                HandleLogin(e);
+            } else {
+                HandleRegister(e);
+            }
+        }
+    };
+
     const myInputBox = (
         <div>
             <div className="input-field col s12 username">
@@ -81,7 +103,8 @@ function Authentication({ mode , onLogin}) {
                     type="password"
                     className="validate" 
                     onChange={onPwChange}
-                    value={userPW}/>
+                    value={userPW}
+                    onKeyPress={handleKeyPress}/>
             </div>
         </div>
     );
@@ -110,7 +133,7 @@ function Authentication({ mode , onLogin}) {
         <div className="card-content">
             <div className="row">
                 {myInputBox}
-                <a className="waves-effect waves-light btn">CREATE</a>
+                <a className="waves-effect waves-light btn" onClick={HandleRegister}>CREATE</a>
             </div>
         </div>
     );

@@ -1,9 +1,18 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
+import { PropTypes } from 'prop-types';
 
-function Header() {
-    const [isLoggedIn, modifier] = React.useState(0);
+Header.propTypes = {
+    isLoggedIn: PropTypes.bool,
+    onLogout: PropTypes.func
+};
 
+Header.defaultProps = {
+    isLoggedIn: false,
+    onLogout: () => { console.error("logout function not defined");}
+};
+
+function Header({isLoggedIn, onLogout}) {
     const onClick = ()=>{
         console.log("clicked!!", isLoggedIn)
     }
@@ -18,7 +27,7 @@ function Header() {
 
     const logoutButton = (
         <li>
-            <a>
+            <a onClick={onLogout}>
                 <i className="material-icons">lock_open</i>
             </a>
         </li>

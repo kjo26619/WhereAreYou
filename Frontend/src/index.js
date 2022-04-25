@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import Routes from './Routes';
+
+import './style.css';
 
 // Redux
 import {Provider} from 'react-redux';
@@ -13,7 +15,7 @@ const store = createStore(reducers, applyMiddleware(thunk));
 ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>
-      <App />
+      <Routes />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
