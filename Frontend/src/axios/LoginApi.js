@@ -20,11 +20,11 @@ export function joinUser(){
 
     axios.post(url, {
             name: "name",
-            user_id: "userId",
+            userId: "userId",
             pw : "pw",
-            userx : 1.1,
-            usery : 2.2,
-            kakao_id: 123,
+            userX : 1.1,
+            userY : 2.2,
+            kakaoId: 123,
     },
     {
         Credential : true,
@@ -51,7 +51,7 @@ export function isExistUser(){
 }
 
 export function updateUser(){
-    const url = baseURL + "/user";
+    const url = baseURL + "/user/1";
 
     axios.put(url, {
             name: "name",

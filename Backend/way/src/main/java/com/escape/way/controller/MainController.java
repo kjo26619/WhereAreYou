@@ -23,20 +23,18 @@ public class MainController {
 
   //가입
   @PostMapping(value = "/join")
-  public Map<String, Object> join(@RequestBody User user) {
+  public ResponseEntity<Map<String, Object>> join(@RequestBody User user) {
     Map<String, Object> response = new HashMap<>();
-
-    System.out.println("MainController");
-    System.out.println(user.toString());
 
     User newUser = userService.joinUser(user);
 
+    System.out.println("Check2");
     if (newUser != null) response.put("result", "SUCCESS"); else response.put(
       "result",
-      "SUCCESS"
+      "Fail"
     );
 
-    return response;
+    return ResponseEntity.ok(response);
   }
 
   // 걍 유저 1명
@@ -65,7 +63,7 @@ public class MainController {
   }
 
   //유저 업데이트
-  @PatchMapping("/user/{id}")
+  @PutMapping("/user/{id}")
   public Map<String, Object> updateUser(
     @PathVariable("id") String id,
     @RequestBody User user

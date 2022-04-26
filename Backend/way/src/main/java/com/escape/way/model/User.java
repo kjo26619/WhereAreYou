@@ -98,6 +98,6 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return super.toString();
+        return this.name + ", " + this.pw + ", " + this.userId + ", " + this.getUserX() + ", " + this.getUserY() + ", " + this.getKakaoId();
     }
 }
