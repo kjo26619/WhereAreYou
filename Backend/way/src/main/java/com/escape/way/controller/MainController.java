@@ -8,6 +8,15 @@ import com.escape.way.service.UserService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD
+=======
+
+import com.escape.way.model.Appointment;
+import com.escape.way.service.UserService;
+
+import com.escape.way.service.AppointmentService;
+import com.escape.way.model.User;
+>>>>>>> 86646f4e0e1bc1d8b698e9781a3f608593fb1491
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

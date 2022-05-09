@@ -19,7 +19,7 @@ public class User implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long no;
+    private Long userNo;
 
     @Column
     private String name;
@@ -28,17 +28,15 @@ public class User implements Serializable{
     private float userX;
     private float userY;
     private Long kakaoId;
+    private String test13; //String <-> Long
+    private String test2;
 
     @OneToMany(mappedBy = "user")
     private List<UAMap> uamaps = new ArrayList<UAMap>();
 
-    public Long getNo() {
-        return no;
-    }
+    public Long getUserNo() { return userNo; }
 
-    public void setNo(Long no) {
-        this.no = no;
-    }
+    public void setUserNo(Long userNo) { this.userNo = userNo; }
 
     public String getName() {
         return name;
@@ -88,10 +86,9 @@ public class User implements Serializable{
         this.uamaps = uamaps;
     }
 
-    public Long getKakaoId() {
-        return kakaoId;
-    }
+    public Long getKakaoId() { return kakaoId; }
 
+<<<<<<< HEAD
     public void setKakaoId(Long kakaoId) {
         this.kakaoId = kakaoId;
     }
@@ -100,4 +97,7 @@ public class User implements Serializable{
     public String toString() {
         return this.name + ", " + this.pw + ", " + this.userId + ", " + this.getUserX() + ", " + this.getUserY() + ", " + this.getKakaoId();
     }
+=======
+    public void setKakaoId(Long kakaoId) { this.kakaoId = kakaoId; }
+>>>>>>> 86646f4e0e1bc1d8b698e9781a3f608593fb1491
 }

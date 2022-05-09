@@ -4,7 +4,7 @@ import AppointmentBox from '../components/AppointmentBox';
 
 function Home() {
   return (
-      <div>
+      <div className='wrapper'>
         <Map/>
         <AppointmentBox/>
       </div>
