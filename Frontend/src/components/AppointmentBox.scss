@@ -1,0 +1,14 @@
+.AppointmentBox {
+    width: 1000px;
+    height: 400px;
+    margin: auto;
+    table {
+        > tbody {
+            > tr {
+                margin-top: 2px;
+                margin-bottom: 2px;
+            }   
+        }   
+    } 
+}
+
