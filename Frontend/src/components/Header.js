@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 import { PropTypes } from 'prop-types';
+import Navbar from './Navbar';
 
 Header.propTypes = {
     isLoggedIn: PropTypes.bool,
@@ -38,10 +39,13 @@ function Header({isLoggedIn, onLogout}) {
             <div className="nav-wrapper yellow darken-1">
                 <Link to="/" className="brand-logo center">WAY</Link>
                 <ul>
-                    <li>
+                    {/* <li>
                         <Link to="/write">
                             <i className="material-icons">search</i>
                         </Link>
+                    </li> */}
+                    <li>
+                        <Navbar/>
                     </li>
                 </ul>
 

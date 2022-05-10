@@ -20,7 +20,7 @@ export function loginRequest(username, password) {
                 // FAILED
                 dispatch(loginFailure());
             });
-    };
+    }; 
 }
 
 export function login() {

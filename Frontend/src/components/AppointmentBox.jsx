@@ -2,14 +2,12 @@ import React, {useState } from 'react';
 import "./AppointmentBox.scss";
 
 function AppointmentBox(){
-    const kakaoLogin = ()=>{
-    }
     return(
         <div className="AppointmentBox" >
             <table>
                 <thead>
                     <tr>
-                        <th colspan="2">AppointmentBox</th>
+                        <th>AppointmentBox</th>
                     </tr>
                 </thead>
                 <tbody>
