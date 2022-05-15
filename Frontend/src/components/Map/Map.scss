@@ -2,7 +2,8 @@
     width: 300px;
     height: 400px;
     margin: auto;
-    
+    display: flex;
+    z-index: 10;
 }
 
 .MapContainer {

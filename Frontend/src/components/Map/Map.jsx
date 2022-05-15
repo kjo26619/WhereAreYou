@@ -87,12 +87,6 @@ const Map = () => {
     <div className={cn("Map")}>
       <div className={cn("MapContainer")} id="map">
       </div>
-      <div>
-        <button className={cn("Button", "btn-floating", "btn-floating:hover")} id="button2" onClick={deleteAllMarker}>Delete All Marker</button>
-      </div>
-      <div>
-        <label className={cn("TextBox")} id="textbox"> here? </label>
-      </div>
     </div>
   );
 };
