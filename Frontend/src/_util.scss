@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
+
+
 $red: #FA5252;
 $white: #FFFFFF;
 $black: #000000;
@@ -32,4 +35,98 @@ $black: #000000;
     $calc: 32px * $size;
     width: $calc;
     heigh: $calc;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@mixin button($color) {
+
+    margin: 20px;
+    position: relative;
+    border: none;
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 15px;
+    font-family: "paybooc-Light", sans-serif;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s;
+
+    @if $color == 'indigo' {
+        background-color: aliceblue;
+        color: #1e6b7b;
+    }
+    @if $color == 'green' {
+        background-color: #77af9c;
+        color: #d7fff1;
+    }
+    @if $color == 'brown' {
+        background-color: #ce6d39;
+        color: #ffeee4;
+    }
+
+    &:hover {
+        cursor: pointer;
+        @if $color == 'indigo' {
+            color: #1e6b7b;
+            background: aliceblue;
+        }
+        @if $color == 'green' {
+            background-color: #77af9c;
+            color: #d7fff1;
+        }
+        @if $color == 'brown' {
+            background-color: #ce6d39;
+            color: #ffeee4;
+        }
+    }
+
+    &:active {
+        transform: scale(1.1);
+    }
+
+    &:visited {
+        transform: scale(1.0);
+    }
+
+    @keyframes gradient1 {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    
+    @keyframes gradient2 {
+        0% {
+            background-position: 100% 50%;
+        }
+        50% {
+            background-position: 0% 50%;
+        }
+        100% {
+            background-position: 100% 50%;
+        }
+    }
+    
+    @keyframes ring {
+        0% {
+            width: 30px;
+            height: 30px;
+            opacity: 1;
+        }
+        100% {
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+        }
+    }
 }
