@@ -87,12 +87,15 @@ const Map = () => {
     <div className={cn("Map")}>
       <div className={cn("MapContainer")} id="map">
       </div>
+<<<<<<< HEAD
       <div>
         <button className={cn("Button")} id="button2" onClick={deleteAllMarker}>Delete All Marker</button>
       </div>
       <div>
         <label className={cn("TextBox")} id="textbox"> here? </label>
       </div>
+=======
+>>>>>>> 57b04b5... Modal
     </div>
   );
 };

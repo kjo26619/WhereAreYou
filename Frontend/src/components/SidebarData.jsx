@@ -4,15 +4,15 @@ import * as BsIcons from 'react-icons/bs';
 export const SidebarData = [
   /*
   {
-    title: '검사하기',
-    path: '/ToExamine',
+    title: 'Home',
+    path: '/',
     icon: <BsIcons.BsPersonBoundingBox />,
     cName: 'nav-text'
   },
   */
   {
-    title: 'Home',
-    path: '/',
+    title: 'Test',
+    path: '/Test',
     icon: <BsIcons.BsFillHouseDoorFill />,
     cName: 'nav-text'
   },

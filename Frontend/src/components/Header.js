@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom'
 import { PropTypes } from 'prop-types';
 import Navbar from './Navbar';
+<<<<<<< HEAD
 import './Header.scss'
+=======
+import MyModal from './MyModal';
+>>>>>>> 57b04b5... Modal
 
 Header.propTypes = {
     isLoggedIn: PropTypes.bool,
@@ -15,6 +19,21 @@ Header.defaultProps = {
 };
 
 function Header({isLoggedIn, onLogout}) {
+
+    const [isOpen, setOpen] = useState(false);
+
+    const handleClick = () => {
+        setOpen(true);
+    }
+
+    const handleClickSumbit = () => {
+        setOpen(false);
+    }
+
+    const handleClickCancel = () => {
+        setOpen(false);
+    }
+
     const onClick = ()=>{
         console.log("clicked!!", isLoggedIn)
     }
@@ -47,6 +66,10 @@ function Header({isLoggedIn, onLogout}) {
                     </li> */}
                     <li>
                         <Navbar/>
+                    </li>
+                    <li>
+                        <button onClick={handleClick}> Modal Open </button>
+                        <MyModal isOpen={isOpen} onSubmit={handleClickSumbit} onCancel={handleClickCancel} />
                     </li>
                 </ul>
 

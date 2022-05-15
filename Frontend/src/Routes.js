@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes as Switch } from 'react-router-dom';
 
 import { Write } from './components';
-import { App, Home, Login, Register } from './containers';
+import { App, Home, Login, Register, Test } from './containers';
 
 function Routes() {
     return (
@@ -13,6 +13,7 @@ function Routes() {
                 <Route path='/login' element={<Login />} />
                 <Route path='/write' element={<Write />} />
                 <Route path='/Register' element={<Register />} />
+                <Route path='/Test' element={<Test />} />
             </Switch>
         </Router>
     );
