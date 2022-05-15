@@ -1,0 +1,35 @@
+$red: #FA5252;
+$white: #FFFFFF;
+$black: #000000;
+
+@mixin mobile {
+    $min_width: 0px; 
+    $max_width: 760px; 
+
+    @media (min-width: $min_width) and (max-width: $max_width) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    $min_width: 761px;
+    $max_width: 1022px;    
+
+    @media (min-width: $min_width) and (max-width: $max_width) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    $min_width: 1023px;
+
+    @media (min-width: $min_width) {
+        @content;
+    }
+}
+
+@mixin square($size) {
+    $calc: 32px * $size;
+    width: $calc;
+    heigh: $calc;
+}

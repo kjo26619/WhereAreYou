@@ -1,0 +1,21 @@
+@import '../util.scss';
+
+.header {
+    background: skyblue;
+    width: 100%
+}
+
+.header a {
+    display: block;
+    color: white;
+
+    font-weight: bold;
+}
+
+.right:hover {
+    background: #99CCFF;
+}
+
+.header-wrapper {
+    color: black;
+}

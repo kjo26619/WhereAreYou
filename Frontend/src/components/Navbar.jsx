@@ -3,7 +3,7 @@ import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { SidebarData } from './SidebarData';
-import './Navbar.css';
+import './Navbar.scss';
 /* 아이콘 컬러 전체 변경 기능 */
 import { IconContext } from 'react-icons';
 

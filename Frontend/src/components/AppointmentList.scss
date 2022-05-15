@@ -1,6 +1,31 @@
+@import '../util.scss';
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 .AppointmentList {
-    width: 50px;
-    height: 10px;
+    width: 100%;
+    height: auto;
     margin: auto;
-    float: left;
+    overflow: auto;
+    font-family: 'Roboto', sans-serif;
+
+    border: 1px solid black;
+}
+
+.listView {
+    display: block;
+    height: 100%;
+    width: 100%;
+    line-height: 25px;
+    font-size: 15px;
+    color: black;
+}
+
+.listView li {
+    box-sizing: border-box;
+    border-bottom: 1px solid black;
+    
+}
+
+.listView a:hover {
+    background-color: #1a83ff;
 }

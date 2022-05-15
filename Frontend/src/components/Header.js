@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import { PropTypes } from 'prop-types';
 import Navbar from './Navbar';
+import './Header.scss'
 
 Header.propTypes = {
     isLoggedIn: PropTypes.bool,
@@ -35,8 +36,8 @@ function Header({isLoggedIn, onLogout}) {
     );
 
     return (
-        <nav>
-            <div className="nav-wrapper yellow darken-1">
+        <nav className='header'>
+            <div className="header-wrapper">
                 <Link to="/" className="brand-logo center">WAY</Link>
                 <ul>
                     {/* <li>
@@ -70,7 +71,7 @@ id: 2168271479
 kakao_account:
 profile:
 is_default_image: false
-nickname: "í˜„ì •"
+nickname: "?˜„? •"
 profile_image_url: "http://k.kakaocdn.net/dn/b4qafq/btrkkX4WXfg/zHA8LzUXaZtRslgtTbjyXK/img_640x640.jpg"
 thumbnail_image_url: "http://k.kakaocdn.net/dn/b4qafq/btrkkX4WXfg/zHA8LzUXaZtRslgtTbjyXK/img_110x110.jpg"
 [[Prototype]]: Object
@@ -78,7 +79,7 @@ profile_image_needs_agreement: false
 profile_nickname_needs_agreement: false
 [[Prototype]]: Object
 properties:
-nickname: "í˜„ì •"
+nickname: "?˜„? •"
 profile_image: "http://k.kakaocdn.net/dn/b4qafq/btrkkX4WXfg/zHA8LzUXaZtRslgtTbjyXK/img_640x640.jpg"
 thumbnail_image: "http://k.kakaocdn.net/dn/b4qafq/btrkkX4WXfg/zHA8LzUXaZtRslgtTbjyXK/img_110x110.jpg"
 
