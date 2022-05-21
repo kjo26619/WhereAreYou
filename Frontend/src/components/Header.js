@@ -2,11 +2,8 @@ import React, {useState} from 'react';
 import {Link} from 'react-router-dom'
 import { PropTypes } from 'prop-types';
 import Navbar from './Navbar';
-<<<<<<< HEAD
 import './Header.scss'
-=======
 import MyModal from './MyModal';
->>>>>>> 57b04b5... Modal
 
 Header.propTypes = {
     isLoggedIn: PropTypes.bool,
@@ -94,7 +91,7 @@ id: 2168271479
 kakao_account:
 profile:
 is_default_image: false
-nickname: "?˜„? •"
+nickname: "?ï¿½ï¿½?ï¿½ï¿½"
 profile_image_url: "http://k.kakaocdn.net/dn/b4qafq/btrkkX4WXfg/zHA8LzUXaZtRslgtTbjyXK/img_640x640.jpg"
 thumbnail_image_url: "http://k.kakaocdn.net/dn/b4qafq/btrkkX4WXfg/zHA8LzUXaZtRslgtTbjyXK/img_110x110.jpg"
 [[Prototype]]: Object
@@ -102,7 +99,7 @@ profile_image_needs_agreement: false
 profile_nickname_needs_agreement: false
 [[Prototype]]: Object
 properties:
-nickname: "?˜„? •"
+nickname: "?ï¿½ï¿½?ï¿½ï¿½"
 profile_image: "http://k.kakaocdn.net/dn/b4qafq/btrkkX4WXfg/zHA8LzUXaZtRslgtTbjyXK/img_640x640.jpg"
 thumbnail_image: "http://k.kakaocdn.net/dn/b4qafq/btrkkX4WXfg/zHA8LzUXaZtRslgtTbjyXK/img_110x110.jpg"
 

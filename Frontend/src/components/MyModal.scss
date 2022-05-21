@@ -1,4 +1,11 @@
-.ReactModal__Body--open {
+@import '../util.scss';
+
+
+
+.modal-wrapper {
     display: flex;
-    z-index: 999;
+    z-index: 1050;
+
+    @include modal(.5s);
 }
+
