@@ -1,8 +1,34 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom'
+import { PropTypes } from 'prop-types';
+import Navbar from './Navbar';
+import MyModal from './MyModal';
 
-function Header() {
-    const [isLoggedIn, modifier] = React.useState(0);
+Header.propTypes = {
+    isLoggedIn: PropTypes.bool,
+    onLogout: PropTypes.func
+};
+
+Header.defaultProps = {
+    isLoggedIn: false,
+    onLogout: () => { console.error("logout function not defined");}
+};
+
+function Header({isLoggedIn, onLogout}) {
+
+    const [isOpen, setOpen] = useState(false);
+
+    const handleClick = () => {
+        setOpen(true);
+    }
+
+    const handleClickSumbit = () => {
+        setOpen(false);
+    }
+
+    const handleClickCancel = () => {
+        setOpen(false);
+    }
 
     const onClick = ()=>{
         console.log("clicked!!", isLoggedIn)
@@ -18,7 +44,7 @@ function Header() {
 
     const logoutButton = (
         <li>
-            <a>
+            <a onClick={onLogout}>
                 <i className="material-icons">lock_open</i>
             </a>
         </li>
@@ -29,10 +55,17 @@ function Header() {
             <div className="nav-wrapper yellow darken-1">
                 <Link to="/" className="brand-logo center">WAY</Link>
                 <ul>
-                    <li>
+                    {/* <li>
                         <Link to="/write">
                             <i className="material-icons">search</i>
                         </Link>
+                    </li> */}
+                    <li>
+                        <Navbar/>
+                    </li>
+                    <li>
+                        <button onClick={handleClick}> Modal Open </button>
+                        <MyModal isOpen={isOpen} onSubmit={handleClickSumbit} onCancel={handleClickCancel} />
                     </li>
                 </ul>
 

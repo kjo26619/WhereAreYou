@@ -1,18 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes as Switch } from 'react-router-dom';
 
-import { Header, Write } from './components';
-import { Home, Login, Register } from './containers';
+import { Write } from './components';
+import { App, Home, Login, Register, Test } from './containers';
 
-function Routes(){
+function Routes() {
     return (
         <Router>
-            <Header/>
+            <App />
             <Switch>
-                <Route exact path='/login' element={<Login/>}/>
-                <Route exact path='/' element={<Home/>}/>
-                <Route exact path='/write' element={<Write/>}/>
-                <Route exact path='/Register' element={<Register/>}/>
+                <Route path='/' element={<Home />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/write' element={<Write />} />
+                <Route path='/Register' element={<Register />} />
+                <Route path='/Test' element={<Test />} />
             </Switch>
         </Router>
     );
