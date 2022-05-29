@@ -11,9 +11,8 @@ function Home() {
           <Map/>
         </div>
         <div>
-        <AppointmentList/>
-        </div>
         <AppointmentBox/>
+        </div>
       </div>
   );
 }

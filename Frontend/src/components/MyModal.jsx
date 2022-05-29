@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactModal from 'react-modal';
-import AppointmentList from "./AppointmentList";
+import AddAppointment from "./AddAppointment";
 import './MyModal.scss';
 
 
@@ -25,7 +25,7 @@ function MyModal({isOpen, onSubmit, onCancel }){
                 </header>
 
                 <div className = 'modal-bg'>
-                    <AppointmentList/>
+                    <AddAppointment/>
                 </div>
                 
                 <footer className='modal-footer'>
