@@ -6,6 +6,13 @@
     display: flex;
     z-index: 1050;
 
-    @include modal(.5s);
+    @include modal(1s);
 }
 
+.modal-btn-img {
+    @include image-button(white, black);
+
+    em {
+        font-style: normal;
+    }
+}

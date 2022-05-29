@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import AppointmentList from "./AppointmentList";
 import './MyModal.scss';
 
+
 function MyModal({isOpen, onSubmit, onCancel }){
     const handleClickSubmit = () => {
         onSubmit();
@@ -28,8 +29,20 @@ function MyModal({isOpen, onSubmit, onCancel }){
                 </div>
                 
                 <footer className='modal-footer'>
-                    <button className='modal-btn-1' onClick={handleClickSubmit}>확인</button>
-                    <button className='modal-btn-2' onClick={handleClickCancel}>취소</button>
+                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,200" />
+                    <button className='modal-btn-img' onClick={handleClickSubmit}>
+                        <div className='img-bg'>
+                        <i class="material-symbols-outlined">done</i>
+                        </div>
+                        <em>확인</em>
+                        
+                    </button>
+                    <button className='modal-btn-img' onClick={handleClickCancel}>
+                        <div className='img-bg'>
+                        <i class="material-symbols-outlined">close</i>
+                        </div>
+                        <em>취소</em>
+                    </button>
                 </footer>
             </div>
         </ReactModal>

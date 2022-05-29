@@ -1,8 +1,10 @@
 @import '../util.scss';
 
+
 .header {
     background: skyblue;
-    width: 100%
+    width: 100%;
+
 }
 
 .header a {
@@ -19,3 +21,15 @@
 .header-wrapper {
     color: black;
 }
+
+.btn-img {
+    @include image-button(skyblue, white);
+    
+    em {
+        font-style: normal;
+    }
+}
+
+// .modal-btn {
+//     @include image-button('indigo', 'url')
+// }

@@ -4,6 +4,7 @@ import { PropTypes } from 'prop-types';
 import Navbar from './Navbar';
 import './Header.scss'
 import MyModal from './MyModal';
+import * as BsIcons from 'react-icons/bs';
 
 Header.propTypes = {
     isLoggedIn: PropTypes.bool,
@@ -65,7 +66,12 @@ function Header({isLoggedIn, onLogout}) {
                         <Navbar/>
                     </li>
                     <li>
-                        <button onClick={handleClick}> Modal Open </button>
+                        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,200" />
+                        <button className="btn-img" onClick={handleClick}>
+                            <div className='img-bg-no-border'>
+                            <i class="material-symbols-outlined">add</i>
+                            </div>
+                        </button>
                         <MyModal isOpen={isOpen} onSubmit={handleClickSumbit} onCancel={handleClickCancel} />
                     </li>
                 </ul>
