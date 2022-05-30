@@ -88,16 +88,5 @@ public class User implements Serializable{
 
     public Long getKakaoId() { return kakaoId; }
 
-<<<<<<< HEAD
-    public void setKakaoId(Long kakaoId) {
-        this.kakaoId = kakaoId;
-    }
-
-    @Override
-    public String toString() {
-        return this.name + ", " + this.pw + ", " + this.userId + ", " + this.getUserX() + ", " + this.getUserY() + ", " + this.getKakaoId();
-    }
-=======
     public void setKakaoId(Long kakaoId) { this.kakaoId = kakaoId; }
->>>>>>> 86646f4e0e1bc1d8b698e9781a3f608593fb1491
 }
