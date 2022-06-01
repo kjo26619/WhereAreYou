@@ -1,13 +1,21 @@
 import axios from 'axios';
 
-const baseURL = "http://localhost:8080";
+const baseURL = "http://localhost:8080/api";
 
-export function getAppointment(){
-    const url = baseURL + "/appointment/1";
+export function getAppointment(data, setData){
+    const url = baseURL + "/appointment?no=1";
 
     axios.get(url)
     .then((res) => {
-        console.log(res);
+        /*setData(data => [...data, {
+            appoinmentNo: "약속 번호2", 
+            name: "약속 이름", 
+            placeName: "약속 장소",
+            placeX: 1.1,
+            placeY: 2.2,
+        }]);*/
+        console.log(res.data);
+        setData(data => [...data, res.data]);
     })
     .catch((error) => {
         console.log(error);
