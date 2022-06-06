@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import MyModal from '../components/MyModal';
+import AddAppointment from "../components/AddAppointment";
 
 
 function Test() {
@@ -20,6 +21,7 @@ function Test() {
     return (
         <div>
             <button onClick={handleClick}> Modal Open </button>
+            <AddAppointment />
             <MyModal isOpen={isOpen} onSubmit={handleClickSumbit} onCancel={handleClickCancel} />
         </div>
     );

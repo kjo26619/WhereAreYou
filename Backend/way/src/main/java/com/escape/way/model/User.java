@@ -59,7 +59,9 @@ public class User implements Serializable, UserDetails {
         return pw;
     }
 
-    public void setPw(String pw) {  this.pw = pw;  }
+    public void setPw(String pw) {
+        this.pw = pw;
+    }
 
     public float getUserX() {
         return userX;

@@ -1,7 +1,7 @@
 //import React, { useState } from 'react';
 import axios from 'axios';
 
-const baseURL = "http://localhost:8080";
+const baseURL = "http://localhost:8080/api";
 
 export function getUser(){
     const url = baseURL + "/user";
