@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ReactModal from 'react-modal';
 import AppointmentList from "./AppointmentList";
+import Map from "./Map/Map";
+import SearchPlace from "./SearchPlace";
 
 function MyModal({isOpen, onSubmit, onCancel }){
     const handleClickSubmit = () => {
@@ -17,11 +19,12 @@ function MyModal({isOpen, onSubmit, onCancel }){
             ariaHideApp={false}
             >
             <div>
-                <AppointmentList/>
-            </div>
-            <div>
                 <button onClick={handleClickSubmit}>확인</button>
                 <button onClick={handleClickCancel}>취소</button>
+            </div>
+            <div>
+                <Map/>
+                <SearchPlace/>
             </div>
         </ReactModal>
     );

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import MyModal from '../components/MyModal';
 import AddAppointment from "../components/AddAppointment";
 
-
 function Test() {
     const [isOpen, setOpen] = useState(false);
 
