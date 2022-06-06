@@ -25,7 +25,7 @@ public class Appointment implements Serializable{
     private float placeY;
     private boolean openToAll;
 
-    @OneToMany(mappedBy = "appointment")
+    @OneToMany(mappedBy = "appointment",  fetch = FetchType.LAZY)
     private List<UAMap> uamaps = new ArrayList<UAMap>();
 
     public Long getAppointmentNo() {

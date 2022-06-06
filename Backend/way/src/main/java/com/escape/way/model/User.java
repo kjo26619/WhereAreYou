@@ -1,19 +1,21 @@
 package com.escape.way.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.*;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 @Entity
 @Table(name= "user")
 @Getter
 @Setter
-public class User implements Serializable{
+public class User implements Serializable, UserDetails {
     
     private static final long serialVersionUID = 1L;
 
@@ -28,8 +30,7 @@ public class User implements Serializable{
     private float userX;
     private float userY;
     private Long kakaoId;
-    private String test13; //String <-> Long
-    private String test2;
+    private String auth;
 
     @OneToMany(mappedBy = "user")
     private List<UAMap> uamaps = new ArrayList<UAMap>();
@@ -58,9 +59,7 @@ public class User implements Serializable{
         return pw;
     }
 
-    public void setPw(String pw) {
-        this.pw = pw;
-    }
+    public void setPw(String pw) {  this.pw = pw;  }
 
     public float getUserX() {
         return userX;
@@ -88,7 +87,6 @@ public class User implements Serializable{
 
     public Long getKakaoId() { return kakaoId; }
 
-<<<<<<< HEAD
     public void setKakaoId(Long kakaoId) {
         this.kakaoId = kakaoId;
     }
@@ -97,7 +95,46 @@ public class User implements Serializable{
     public String toString() {
         return this.name + ", " + this.pw + ", " + this.userId + ", " + this.getUserX() + ", " + this.getUserY() + ", " + this.getKakaoId();
     }
-=======
-    public void setKakaoId(Long kakaoId) { this.kakaoId = kakaoId; }
->>>>>>> 86646f4e0e1bc1d8b698e9781a3f608593fb1491
+
+    //sprint security
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> roles = new HashSet<>();
+
+        for (String role : auth.split(",")) {
+            roles.add(new SimpleGrantedAuthority(role));
+        }
+
+        return roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return pw;
+    }
+
+    @Override
+    public String getUsername() {
+        return userId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
