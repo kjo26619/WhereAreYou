@@ -3,10 +3,18 @@ package com.escape.way.controller;
 import com.escape.way.model.User;
 import com.escape.way.service.UserService;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 @Controller
 public class UserController {
@@ -16,10 +24,20 @@ public class UserController {
 
   //가입
   @PostMapping(value = "/api/join")
-  public @ResponseBody String join(@RequestBody User user){
-    User newUser = userService.joinUser(user);
-    if (newUser != null) return "FAIL";
-    else return "SUCCESS";
+  public ResponseEntity<String> join(@RequestBody User user){
+    userService.joinUser(user);
+    return ResponseEntity.ok("Success");
+  }
+
+  @GetMapping(value = "/login")
+  public String loginPage() {
+    return "login";
+  }
+
+  @GetMapping(value = "/api/logout")
+  public String logoutPage(HttpServletRequest req, HttpServletResponse res) {
+    new SecurityContextLogoutHandler().logout(req, res, SecurityContextHolder.getContext().getAuthentication());
+    return "redirect:/login";
   }
 
   // 해당 id를 가진 유저
@@ -29,7 +47,7 @@ public class UserController {
   }
 
   // 전체 유저 리스트
-  @GetMapping(value = "/api/userlist")
+  @GetMapping(value = "/api/userList")
   public ResponseEntity<List<User>> getUserList() {
     return ResponseEntity.ok(userService.getUserList());
   }
