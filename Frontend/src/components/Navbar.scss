@@ -9,19 +9,16 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
-
-.navbar{
-    /* background-color: #eee01f; */
-    height: 50px;
-    display: flex;
-    justify-items: center;
-    align-items: center;
-}
   
 .menu-bars{
     /* margin-left: 2rem; */
     font-size: 2rem;
     background:none;
+
+    
+    .black-icon {
+        color: black;
+    }
 }
   
 .nav-menu {

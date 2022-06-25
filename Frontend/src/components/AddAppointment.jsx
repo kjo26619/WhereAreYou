@@ -4,6 +4,7 @@ import "./AddAppointment.scss";
 function AddAppointment(){
     return(
         <div className="Add-Appointment" >
+            <form>
             <div class="input-box">
                 <input type="text" name="" required>
                 </input>
@@ -19,7 +20,7 @@ function AddAppointment(){
             <div class="input-box">
                 <input type="date" name="" required="">
                 </input>
-                <label>Calender</label>
+                <label>Calendar</label>
             </div>
 
             <div class="input-box">
@@ -27,6 +28,7 @@ function AddAppointment(){
                 </input>
                 <label>Friends</label>
             </div>
+            </form>
         </div>
     );
 };

@@ -39,7 +39,12 @@ function Header({isLoggedIn, onLogout}) {
     const loginButton = (
         <li>
             <Link to="/login">
-                <i className="material-icons">vpn_key</i>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,1,200" />
+                <button className="btn-img">
+                <div className='img-bg-no-border'>
+                    <i class="material-symbols-outlined">key</i>
+                </div>
+                </button>
             </Link>
         </li>
     );
@@ -55,31 +60,37 @@ function Header({isLoggedIn, onLogout}) {
     return (
         <nav className='header'>
             <div className="header-wrapper">
-                <Link to="/" className="brand-logo center">WAY</Link>
-                <ul>
-                    {/* <li>
-                        <Link to="/write">
-                            <i className="material-icons">search</i>
-                        </Link>
-                    </li> */}
-                    <li>
+                <div className="left">
+                    <ul>
+                        {/* <li>
+                            <Link to="/write">
+                                <i className="material-icons">search</i>
+                            </Link>
+                        </li> */}
+                        
+                        <li>
+                            <Link to="/" className="logo-left">WAY</Link>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div className="right">
+                    <div className="list-component">
                         <Navbar/>
-                    </li>
-                    <li>
-                        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,200" />
+                    </div>
+                    <div className="list-component">
+                        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,1,200" />
                         <button className="btn-img" onClick={handleClick}>
                             <div className='img-bg-no-border'>
                             <i class="material-symbols-outlined">add</i>
                             </div>
                         </button>
                         <MyModal isOpen={isOpen} onSubmit={handleClickSumbit} onCancel={handleClickCancel} />
-                    </li>
-                </ul>
-
-                <div className="right">
-                    <ul onClick={onClick}>
+                    </div>
+                    <div className="list-component" onClick={onClick}>
                         { isLoggedIn ? logoutButton : loginButton }
-                    </ul>
+                    </div>
                 </div>
             </div>
         </nav>

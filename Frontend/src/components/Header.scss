@@ -1,29 +1,49 @@
 @import '../util.scss';
 
-
 .header {
-    background: skyblue;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
 
+    flex-shrink: 0;
+    background: #ECEFF1;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0px;
+
+    align-items: center;
 }
 
 .header a {
     display: block;
-    color: white;
+    color: black;
 
     font-weight: bold;
 }
 
-.right:hover {
-    background: #99CCFF;
+.right {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    padding-left:15px;
+    padding-top: 10px;
 }
 
-.header-wrapper {
-    color: black;
+.list-component {
+    vertical-align: baseline;
+    margin-left: 20px;
+
+    align-content: center;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.logo-left {
+    font-size: 50px;
 }
 
 .btn-img {
-    @include image-button(skyblue, white);
+    @include image-button(#ECEFF1, black);
     
     em {
         font-style: normal;

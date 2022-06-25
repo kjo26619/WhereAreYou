@@ -214,20 +214,20 @@ $black: #000000;
 
 @mixin image-button($bg-color, $icon-color) {
     position: relative;
-    width: 50px;
-    height: 50px;
+    width: 24px;
+    height: 24px;
     background-color: rgba(255,255,255,0);
     
     border: none;
 
-    margin: 5px 15px 0;
+    margin: 5px 5px 0;
 
     .img-bg {
         position: relative;
         display: flex;
 
-        width: 50px;
-        height: 50px;
+        width: 24px;
+        height: 24px;
         justify-content: center;
         align-items: center;
         text-align: center;
@@ -249,9 +249,9 @@ $black: #000000;
     .img-bg-no-border {
         position: relative;
         display: flex;
-
-        width: 50px;
-        height: 50px;
+        
+        width: 24px;
+        height: 24px;
         justify-content: center;
         align-items: center;
         text-align: center;

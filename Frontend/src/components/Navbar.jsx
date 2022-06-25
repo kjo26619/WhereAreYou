@@ -17,9 +17,12 @@ function Navbar() {
       <IconContext.Provider value={{ color: '#fff' }}>
         {/* 네비게이션 토글 코드*/}
         <div className="navbar">
-          <Link to="#" className="menu-bars material-icons">
-            <FaIcons.FaBars onClick={showSidebar} />
-          </Link>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,1,200" />
+          <button className="btn-img" onClick={showSidebar}>
+          <div className='img-bg-no-border'>
+            <i class="material-symbols-outlined">menu</i>
+          </div>
+          </button>
         </div>
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
           <ul className="nav-menu-items" onClick={showSidebar}>
