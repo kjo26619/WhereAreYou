@@ -29,6 +29,7 @@ public class AppointmentController {
     ResponseEntity<List<Appointment>> getAppointmentByUserId(@RequestParam String userId) {
         List<Appointment> appointments = appointmentService.getAppointmentList(userId);
         if(appointments == null) return ResponseEntity.badRequest().build();
+
         return ResponseEntity.ok(appointments);
     }
 
