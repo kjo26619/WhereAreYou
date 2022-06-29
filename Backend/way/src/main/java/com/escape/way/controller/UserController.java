@@ -24,7 +24,17 @@ public class UserController {
 
   //가입
   @PostMapping(value = "/api/join")
-  public ResponseEntity<String> join(@RequestBody User user){
+  public ResponseEntity<String> join(@RequestParam String userId, @RequestParam String password, @RequestParam String name){
+    User user = new User();
+    user.setUserId(userId);
+    user.setName(name);
+    user.setPw(password);
+
+    user.setUserX(0);
+    user.setUserY(0);
+    user.setAuth("ROLE_USER");
+    user.setKakaoId(1L);
+
     userService.joinUser(user);
     return ResponseEntity.ok("Success");
   }
