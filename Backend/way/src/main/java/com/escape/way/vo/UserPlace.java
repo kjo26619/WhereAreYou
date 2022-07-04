@@ -5,6 +5,12 @@ public  class UserPlace{
     private float userX;
     private float userY;
 
+    public UserPlace(String id, float x, float y) {
+        this.userId = id;
+        this.userX = x;
+        this.userY = y;
+    }
+
     public String getUserId() {
         return userId;
     }

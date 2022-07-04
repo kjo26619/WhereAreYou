@@ -2,11 +2,14 @@ package com.escape.way.controller;
 
 import com.escape.way.model.User;
 import com.escape.way.service.UAMapService;
+import com.escape.way.service.UserService;
+import com.escape.way.vo.UserPlace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,10 +17,12 @@ import java.util.List;
 public class UAMapController {
     @Autowired
     UAMapService uaMapService;
+    @Autowired
+    UserService userService;
 
     @ResponseBody
-    @RequestMapping(value = "/api/getUserList", method=RequestMethod.GET)
-    public List<Long> getUserList(@RequestParam(value = "no") String no) {
+    @RequestMapping(value = "/api/appointment2UserPlaceList", method=RequestMethod.GET)
+    public List<UserPlace> getUserList(@RequestParam(value = "no") String no) {
         System.out.println(no);
         long appointmentNo = Long.parseLong(no);
         System.out.println(appointmentNo);
@@ -29,6 +34,20 @@ public class UAMapController {
         }
         System.out.println(" ");
 
-        return res;
+        List<UserPlace> result =getUserList2PlaceList(res);
+
+        return result;
+    }
+
+    public List<UserPlace> getUserList2PlaceList(List<Long> userList) {
+        List<UserPlace> resList = new ArrayList<UserPlace>();
+
+        for(Iterator<Long> iter = userList.iterator();iter.hasNext();) {
+            UserPlace userPlace = userService.getUserPlace(iter.next());
+
+            resList.add(userPlace);
+        }
+
+        return resList;
     }
 }
