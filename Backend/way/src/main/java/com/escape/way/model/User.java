@@ -25,12 +25,14 @@ public class User implements Serializable, UserDetails {
 
     @Column
     private String name;
-    private String userId;
     private String pw;
     private float userX;
     private float userY;
     private Long kakaoId;
     private String auth;
+
+    @Column(unique = true)
+    private String userId;
 
     @OneToMany(mappedBy = "user")
     private List<UAMap> uamaps = new ArrayList<UAMap>();

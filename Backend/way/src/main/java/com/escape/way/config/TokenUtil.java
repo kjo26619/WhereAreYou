@@ -15,12 +15,12 @@ import java.util.function.Function;
 
 @Component
 public class TokenUtil {
-    public final static long ACCESS_TOKEN_VALIDATION = 1000L * 10;
-    public final static long REFRESH_TOKEN_VALIDATION = 1000L * 60 * 24 * 2;
+    public final static long ACCESS_TOKEN_VALIDATION = 1000L * 60 * 2;
+    public final static long REFRESH_TOKEN_VALIDATION = 1000L * 60 * 4;
 
     final static public String ACCESS_TOKEN = "accessToken";
 
-    @Value("${security.jwt.token.secret-key}")
+    // @Value("${security.jwt.token.secret-key}")
     private static final String secretKey = "SecretKey";
 
     public String generateToken(User user, long expiration) {
@@ -39,6 +39,8 @@ public class TokenUtil {
     public String generateAccessToken(User user) {
         return generateToken(user, ACCESS_TOKEN_VALIDATION);
     }
+
+    public String generateRefreshToken(User user) { return generateToken(user, REFRESH_TOKEN_VALIDATION); }
 
     public Boolean validateToken(String token, User user) {
         final String username = getUsernameFromToken(token);

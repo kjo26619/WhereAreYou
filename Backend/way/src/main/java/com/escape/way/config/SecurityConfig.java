@@ -1,8 +1,13 @@
 package com.escape.way.config;
 
 
+import com.escape.way.filter.WayAuthenticationEntryPoint;
+import com.escape.way.filter.WayAuthenticationFilter;
 import com.escape.way.service.UserService;
+
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,9 +17,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,14 +30,17 @@ import java.util.Collections;
 @Slf4j
 @EnableWebSecurity
 @Configuration
+@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+    @Autowired
+    private WayAuthenticationEntryPoint authEntryPoint;
 
-    public SecurityConfig(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private WayAuthenticationFilter authFilter;
 
+    @Autowired
+    private UserService userService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,10 +53,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
+                .authorizeRequests().antMatchers("/api/auth", "/api/join", "/api/reAuth").permitAll()
+                .anyRequest().authenticated()
+
+                .and()
                 .logout()
                 .logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
 
+                .and()
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
+
+        http.
+                addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

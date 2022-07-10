@@ -6,6 +6,7 @@ import com.escape.way.dto.TokenResponse;
 import com.escape.way.model.User;
 import com.escape.way.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,8 +43,29 @@ public class AuthController {
         final User user = userService.loadUserByUsername(userId);
 
         final String accessToken = tokenUtil.generateAccessToken(user);
+        final String refreshToken = tokenUtil.generateRefreshToken(user);
 
-        return ResponseEntity.ok(new TokenResponse(user.getName(), accessToken));
+        redisUtil.setDataExpire(refreshToken, user.getUserId(), tokenUtil.REFRESH_TOKEN_VALIDATION);
+
+        return ResponseEntity.ok(new TokenResponse(user.getUserId(), accessToken, refreshToken));
+    }
+
+    @RequestMapping(value = "/api/reAuth", method= RequestMethod.POST)
+    public ResponseEntity<?> createRefreshToAccessToken(@RequestParam String RefreshToken) throws Exception {
+
+        String userId = null;
+        if (RefreshToken != null) {
+            userId = redisUtil.getData(RefreshToken);
+
+            if (userId.equals(tokenUtil.getUsernameFromToken(RefreshToken))) {
+                User user = userService.loadUserByUsername(userId);
+
+                String returnAccessToken = tokenUtil.generateAccessToken(user);
+
+                return ResponseEntity.ok(new TokenResponse(user.getUserId(), returnAccessToken, "None"));
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     private void authenticate(String username, String password) throws Exception {
