@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ReactModal from 'react-modal';
-import AppointmentList from "./AppointmentList";
 import Map from "./Map/Map";
 import SearchPlace from "./SearchPlace";
 

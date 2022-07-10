@@ -1,4 +1,3 @@
-/* global kakao */
 import React, { useEffect } from "react";
 import cn from "classnames";
 import "./Map.scss";
@@ -8,18 +7,6 @@ const kakao = window.kakao;
 const Map = () => {
   let marker_list = [];
   let infowindow_list = [];
-
-  function deleteAllMarker(){
-    marker_list.forEach( (marker) => {
-      marker.setMap(null);
-    });
-
-    infowindow_list.forEach( (infowindow) => {
-      infowindow.close();
-    });
-
-    marker_list = [];
-  }
 
   useEffect(() => {
 
@@ -81,7 +68,7 @@ const Map = () => {
       displayMarker(latlng, marker_list.length + "번째");
     });
     
-  }, []);
+  });
 
   return (
     <div className={cn("Map")}>

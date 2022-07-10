@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from 'axios';
 
 function BlockTest() {
@@ -41,7 +41,7 @@ function BlockTest() {
 
             url += str_pm[0] + "=" + str_pm[1]
             
-            if (i -1 != params_enter_split.length) {
+            if (i -1 !== params_enter_split.length) {
                 url += "&"
             }
         }

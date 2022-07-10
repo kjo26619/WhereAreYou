@@ -5,21 +5,21 @@ function ListView() {
     
     const [data, setData] = useState([{title: "title", content: "content", no: "1"}]);
     
-    const NewsRow = (props) => {
-        const title = props.row.title;
-        const content = props.row.content;
+    // const NewsRow = (props) => {
+    //     const title = props.row.title;
+    //     const content = props.row.content;
 
-        return (
-            <li>
-                <div className="title">
-                    <span>{title}</span>
-                </div>
-                <div className="content">
-                    <span>{content}</span>
-                </div>
-            </li>
-        );
-    };
+    //     return (
+    //         <li>
+    //             <div className="title">
+    //                 <span>{title}</span>
+    //             </div>
+    //             <div className="content">
+    //                 <span>{content}</span>
+    //             </div>
+    //         </li>
+    //     );
+    // };
     
     useEffect(() => {
         // let apiUrl = 'https://openapi.naver.com/v1/search/news?query=올림픽';
