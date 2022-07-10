@@ -48,13 +48,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUserId(id).orElse(null);
     }
 
-    public int updateUser(String id, User user){
+    public void updateUser(String id, float userX, float userY){
         Optional<User> oUser = userRepository.findByUserId(id);
-        if(oUser.isPresent()) {
-            userRepository.save(oUser.get());
-            return 1;
-        }
-        return 0;
+        User u = oUser.get();
+        u.setUserX(userX);
+        u.setUserY(userY);
+        userRepository.save(u);
     }
 
     public int deleteUser(String id) {

@@ -2,7 +2,10 @@ package com.escape.way.controller;
 
 import com.escape.way.error.ErrorCode;
 import com.escape.way.model.Appointment;
+import com.escape.way.model.User;
 import com.escape.way.service.AppointmentService;
+import com.escape.way.service.UAMapService;
+import com.escape.way.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,11 +18,17 @@ public class AppointmentController {
 
     @Autowired
     AppointmentService appointmentService;
+    @Autowired
+    UAMapService uaMapService;
+    @Autowired
+    UserService userService;
 
     //약속 생성
     @PostMapping(value = "/api/appointment")
-    public @ResponseBody ResponseEntity<String> join(@RequestBody Appointment appointment) {
-        Appointment newAp = appointmentService.createAppointment(appointment);
+    public @ResponseBody ResponseEntity<String> join(@RequestParam String userId, @RequestBody Appointment appointment) {
+        Long appointmentNo = appointmentService.createAppointment(appointment);
+        User u = userService.getUserById(userId);
+        uaMapService.setUAMap(appointmentNo, u.getUserNo());
         return ResponseEntity.ok("success");
     }
 

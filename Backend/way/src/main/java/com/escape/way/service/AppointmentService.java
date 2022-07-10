@@ -41,9 +41,11 @@ public class AppointmentService {
         return appointmentList;
     }
 
-    public Appointment createAppointment(Appointment appointment){
-        Long no = appointment.getAppointmentNo();
-        return appointmentRepository.save(appointment);
+    public Long createAppointment(Appointment appointment){
+        Appointment ap = appointmentRepository.save(appointment);
+        Long appointmentNo = ap.getAppointmentNo();
+        System.out.println(appointmentNo);
+        return appointmentNo;
     }
 
     public int updateAppointment(Long id, Appointment appointment){

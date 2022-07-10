@@ -1,9 +1,14 @@
 package com.escape.way.controller;
 
 import com.escape.way.model.User;
+import com.escape.way.service.UAMapService;
 import com.escape.way.service.UserService;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import com.escape.way.vo.UserPlace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +26,8 @@ public class UserController {
 
   @Autowired
   UserService userService;
+  @Autowired
+  UAMapService uaMapService;
 
   //가입
   @PostMapping(value = "/api/join")
@@ -68,11 +75,28 @@ public class UserController {
     return ResponseEntity.ok(userService.checkIdDuplicate(id));
   }
 
-  //유저 업데이트
-  @PatchMapping("/api/user/{id}")
-  public ResponseEntity<String> updateUser(@PathVariable("id") String id, @RequestBody User user) {
-    if (userService.updateUser(id, user) > 0) return ResponseEntity.ok("Success");
-    else return ResponseEntity.ok("Fail");
+  //유저 업데이트+반환
+  @PatchMapping("/api/user/{appointmentNo}")
+  public List<UserPlace> updateUserPlace(@PathVariable("appointmentNo") String appointmentNo, @RequestParam String userX, @RequestParam String userY, @RequestParam String userId ) {
+    Float uX = Float.parseFloat(userX);
+    Float uY = Float.parseFloat(userY);
+    userService.updateUser(userId, uX, uY);
+
+    List<UserPlace> userPlaceList = new ArrayList<UserPlace>();
+    long apNo = Long.parseLong(appointmentNo);
+    if(apNo >= 0){  // apNo 존재 --> 리스트
+        List<Long> userList = uaMapService.getUserNoList(apNo);
+
+        for(Iterator<Long> iter = userList.iterator();iter.hasNext();) {
+          UserPlace userPlace = userService.getUserPlace(iter.next());
+          userPlaceList.add(userPlace);
+        }
+    }
+    else { // apNo 음수일 때
+      UserPlace up = new UserPlace(userId, uX, uY);
+      userPlaceList.add(up);
+    }
+    return userPlaceList;
   }
 
   //유저 삭제

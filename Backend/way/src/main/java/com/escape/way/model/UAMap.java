@@ -31,4 +31,10 @@ public class UAMap implements Serializable{
 
     @Column
     private boolean owner;
+
+    public UAMap(User user, Appointment appointment) {
+        this.user = user;
+        this.appointment = appointment;
+    }
+
 }
