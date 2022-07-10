@@ -1,34 +1,46 @@
 package com.escape.way.config;
 
 
+import com.escape.way.filter.WayAuthenticationEntryPoint;
+import com.escape.way.filter.WayAuthenticationFilter;
 import com.escape.way.service.UserService;
+
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 
 @Slf4j
 @EnableWebSecurity
 @Configuration
+@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+    @Autowired
+    private WayAuthenticationEntryPoint authEntryPoint;
 
-    public SecurityConfig(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private WayAuthenticationFilter authFilter;
 
+    @Autowired
+    private UserService userService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -41,24 +53,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
-                .authorizeRequests() // (5)
-                .antMatchers( "/*").permitAll()
+                .authorizeRequests().antMatchers("/api/auth", "/api/join", "/api/reAuth").permitAll()
                 .anyRequest().authenticated()
-
-                .and()
-                .formLogin()
 
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
 
+                .and()
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
+
+        http.
+                addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
+        configuration.addAllowedOriginPattern("*");
         configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE"));
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
@@ -67,6 +80,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.escape.way.model.User;
 import com.escape.way.repository.UserRepository;
+import com.escape.way.vo.UserPlace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 //@RequiredArgsConstructor
 @Service
 public class UserService implements UserDetailsService {
-    
+
     @Autowired
     private UserRepository userRepository;
 
@@ -35,7 +36,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean checkIdDuplicate(String id){
-       return userRepository.existsByUserId(id);
+        return userRepository.existsByUserId(id);
     }
 
     public User getUser(Long userNo){
@@ -71,5 +72,9 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> findByIdPw(String id) { return userRepository.findByUserId(id); }
 
+    public UserPlace getUserPlace(Long userNo) {
+        UserPlace result = userRepository.findPlaceById(userNo);
 
+        return result;
+    }
 }
