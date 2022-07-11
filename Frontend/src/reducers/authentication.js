@@ -9,6 +9,8 @@ const initialState = {
         valid: false,
         isLoggedIn: false,
         currentUser: '',
+        accessToken: '',
+        refreshToken: ''
     },
     register: {
         status: 'INIT',
@@ -35,7 +37,9 @@ export default function authentication(state, action) {
                 },
                 status: {
                     isLoggedIn: { $set: true },
-                    currentUser: { $set: action.username }
+                    currentUser: { $set: action.username },
+                    accessToken: { $set: action.accessToken },
+                    refreshToken: { $set: action.refreshToken }
                 }
             });
         case types.AUTH_LOGIN_FAILURE:
@@ -44,7 +48,7 @@ export default function authentication(state, action) {
                     status: { $set: 'FAILURE' }
                 }
             });
-        
+
         /* REGISTER */
         case types.AUTH_REGISTER:
             return update(state, {
@@ -78,14 +82,17 @@ export default function authentication(state, action) {
             return update(state, {
                 status: {
                     valid: { $set: true },
-                    currentUser: { $set: action.username }
+                    currentUser: { $set: action.username },
+                    accessToken: { $set: action.accessToken }
                 }
             });
         case types.AUTH_GET_STATUS_FAILURE:
             return update(state, {
                 status: {
                     valid: { $set: false },
-                    isLoggedIn: { $set: false }
+                    isLoggedIn: { $set: false },
+                    accessToken: { $set: '' },
+                    refreshToken: { $set: '' }
                 }
             });
         /* LOGOUT */
@@ -93,7 +100,9 @@ export default function authentication(state, action) {
             return update(state, {
                 status: {
                     isLoggedIn: { $set: false },
-                    currentUser: { $set: '' }
+                    currentUser: { $set: '' },
+                    accessToken: { $set: '' },
+                    refreshToken: { $set: '' }
                 }
             });
         default:

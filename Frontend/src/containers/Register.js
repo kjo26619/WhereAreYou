@@ -9,11 +9,11 @@ class Register extends React.Component {
         this.handleRegister = this.handleRegister.bind(this);    
     }
     
-    handleRegister(id, pw) {
-        return this.props.registerRequest(id, pw).then(
+    handleRegister(userData) {
+        return this.props.registerRequest(userData).then(
             () => {
                 if(this.props.status === "SUCCESS") {
-                    console.log('[register request] success. id: ', id);
+                    console.log('[register request] success. id: ', userData.id);
                     return true;
                 } else {
                     /*
@@ -27,7 +27,7 @@ class Register extends React.Component {
                         'Password is too short',
                         'Username already exists'
                     ];
-                    console.log('[register request] fail. id: ', id);
+                    console.log('[register request] fail. id: ', userData.id);
                     console.log('error: ', errorMessage[this.props.errorCode - 1] );
                     return false;
                 }
@@ -51,8 +51,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        registerRequest: (id, pw) => {
-            return dispatch(registerRequest(id, pw));
+        registerRequest: (userData) => {
+            return dispatch(registerRequest(userData));
         }
     };
 };

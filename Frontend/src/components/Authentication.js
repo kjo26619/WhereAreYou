@@ -11,73 +11,77 @@ Authentication.propTypes = {
 Authentication.defaultProps = {
     mode: true,
     onLogin: (id, pw) => { console.log("login function not defined") },
-    onRegister: (id, pw) => { console.log("register function not defined") }
+    onRegister: (userData) => { console.log("register function not defined") }
 };
 
-function Authentication({ mode , onLogin, onRegister}) {
-    const [userName, setName] = useState("");
-    const [userPW, setPw] = useState("");
+function Authentication({ mode, onLogin, onRegister }) {
+    const [userData, setData] = useState({ name: '', pw: '', id: '' });
 
-    const onNameChange = (e)=>{
-        setName(e.target.value);
-        console.log(userName);
+    const onNameChange = (e) => {
+        setData((prevState) => { return { ...prevState, name: e.target.value } });
+        console.log(userData);
     };
 
-    const onPwChange = (e)=>{
-        setPw(e.target.value);
-        console.log(userPW);
+    const onPwChange = (e) => {
+        setData((prevState) => { return { ...prevState, pw: e.target.value } });
+        console.log(userData);
     }
 
-    const kakaoLogin = (e)=> {
+    const onIdChange = (e) => {
+        setData((prevState) => { return { ...prevState, id: e.target.value } });
+        console.log(userData);
+    }
+
+    const kakaoLogin = (e) => {
         // kakao login
-        if(!window.Kakao.isInitialized())
-        {
+        if (!window.Kakao.isInitialized()) {
             window.Kakao.init('283559fa033c8cf5d3a8289adcc25596');
             console.log('kakao init: ', window.Kakao.isInitialized());
         }
         window.Kakao.Auth.login({
             success: function (response) {
-              window.Kakao.API.request({
-                url: '/v2/user/me',
-                success: function (response) {
-                    console.log("success: ", response);
-                },
-                fail: function (error) {
-                  console.log(error)
-                },
-              })
+                window.Kakao.API.request({
+                    url: '/v2/user/me',
+                    success: function (response) {
+                        console.log("success: ", response);
+                    },
+                    fail: function (error) {
+                        console.log(error)
+                    },
+                })
             },
             fail: function (error) {
-              console.log(error)
+                console.log(error)
             },
         })
     }
 
-    const HandleLogin = (e)=>{
-        onLogin(userName, userPW).then(
-            (success)=>{
-                if(!success){
-                    setPw('');
+    const HandleLogin = (e) => {
+        onLogin(userData.id, userData.pw).then(
+            (success) => {
+                if (!success) {
+                    setData(() => { return { id: '', pw: '', name: '' } });
+                    console.log(userData);
                 }
             }
         )
     };
 
-    const HandleRegister = (e)=>{
-        onRegister(userName, userPW).then(
-            (result)=>{
-                if(!result){
-                    setName('');
-                    setPw('');
+    const HandleRegister = (e) => {
+        onRegister(userData).then(
+            (result) => {
+                if (!result) {
+                    setData(() => { return { id: '', pw: '', name: '' } });
+                    console.log(userData);
                 }
             }
         )
     };
 
-    const handleKeyPress = (e)=>{
-        if(e.charCode===13) {
-            console.log('enter pressed');
-            if(mode) {
+    const handleKeyPress = (e) => {
+        if (e.charCode == 13) {
+            // enter pressed
+            if (mode) {
                 HandleLogin(e);
             } else {
                 HandleRegister(e);
@@ -88,23 +92,23 @@ function Authentication({ mode , onLogin, onRegister}) {
     const myInputBox = (
         <div>
             <div className="input-field col s12 username">
-                <label>Username</label>
+                <label>UserId</label>
                 <input
-                    name="username"
+                    name="userId"
                     type="text"
                     className="validate"
-                    onChange={onNameChange}
-                    value={userName}/>
+                    onChange={onIdChange}
+                    value={userData.id} />
             </div>
             <div className="input-field col s12">
                 <label>Password</label>
                 <input
                     name="password"
                     type="password"
-                    className="validate" 
+                    className="validate"
                     onChange={onPwChange}
-                    value={userPW}
-                    onKeyPress={handleKeyPress}/>
+                    value={userData.pw}
+                    onKeyPress={handleKeyPress} />
             </div>
         </div>
     );
@@ -120,7 +124,7 @@ function Authentication({ mode , onLogin, onRegister}) {
 
             <div className="footer">
                 <div className="card-content">
-                    <img src='kakao_login_medium_wide.png' alt='kakao login' width='95%' onClick={kakaoLogin}/>
+                    <img src='kakao_login_medium_wide.png' alt='kakao login' width='95%' onClick={kakaoLogin} />
                     <div className="right" >
                         New Here? <Link to="/register">Create an account</Link>
                     </div>
@@ -132,6 +136,15 @@ function Authentication({ mode , onLogin, onRegister}) {
     const registerView = (
         <div className="card-content">
             <div className="row">
+                <div className="input-field col s12">
+                    <label>Nick Name</label>
+                    <input
+                        name="userName"
+                        type="text"
+                        className="validate"
+                        onChange={onNameChange}
+                        value={userData.name} />
+                </div>
                 {myInputBox}
                 <button className="waves-effect waves-light btn" onClick={HandleRegister}>CREATE</button>
             </div>
