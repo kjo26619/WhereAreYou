@@ -46,11 +46,6 @@ public class UserController {
     return ResponseEntity.ok("Success");
   }
 
-  @GetMapping(value = "/login")
-  public String loginPage() {
-    return "login";
-  }
-
   @GetMapping(value = "/api/logout")
   public String logoutPage(HttpServletRequest req, HttpServletResponse res) {
     new SecurityContextLogoutHandler().logout(req, res, SecurityContextHolder.getContext().getAuthentication());
@@ -63,40 +58,10 @@ public class UserController {
     return ResponseEntity.ok(userService.getUserById(id));
   }
 
-  // 전체 유저 리스트
-  @GetMapping(value = "/api/userList")
-  public ResponseEntity<List<User>> getUserList() {
-    return ResponseEntity.ok(userService.getUserList());
-  }
-
   // 중복 확인
   @GetMapping(value = "/api/user/exists")
   public ResponseEntity<Boolean> checkIdDuplicate(@RequestParam String id) {
     return ResponseEntity.ok(userService.checkIdDuplicate(id));
-  }
-
-  //유저 업데이트+반환
-  @PatchMapping("/api/user/{appointmentNo}")
-  public List<UserPlace> updateUserPlace(@PathVariable("appointmentNo") String appointmentNo, @RequestParam String userX, @RequestParam String userY, @RequestParam String userId ) {
-    Float uX = Float.parseFloat(userX);
-    Float uY = Float.parseFloat(userY);
-    userService.updateUser(userId, uX, uY);
-
-    List<UserPlace> userPlaceList = new ArrayList<UserPlace>();
-    long apNo = Long.parseLong(appointmentNo);
-    if(apNo >= 0){  // apNo 존재 --> 리스트
-        List<Long> userList = uaMapService.getUserNoList(apNo);
-
-        for(Iterator<Long> iter = userList.iterator();iter.hasNext();) {
-          UserPlace userPlace = userService.getUserPlace(iter.next());
-          userPlaceList.add(userPlace);
-        }
-    }
-    else { // apNo 음수일 때
-      UserPlace up = new UserPlace(userId, uX, uY);
-      userPlaceList.add(up);
-    }
-    return userPlaceList;
   }
 
   //유저 삭제

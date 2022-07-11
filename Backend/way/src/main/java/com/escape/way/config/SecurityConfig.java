@@ -52,20 +52,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement() //(4)
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                .and()
-                .authorizeRequests().antMatchers("/api/auth", "/api/join", "/api/reAuth").permitAll()
-                .anyRequest().authenticated()
+//                .and()
+//                .authorizeRequests().antMatchers("/api/auth", "/api/join", "/api/reAuth").permitAll()
+//                .anyRequest().authenticated()
 
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
+                .invalidateHttpSession(true);
 
-                .and()
-                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
-
-        http.
-                addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+//                .and()
+//                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
+//
+//        http.
+//                addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

@@ -25,14 +25,14 @@ public class AppointmentController {
 
     //약속 생성
     @PostMapping(value = "/api/appointment")
-    public @ResponseBody ResponseEntity<String> join(@RequestParam String userId, @RequestBody Appointment appointment) {
+    public @ResponseBody ResponseEntity<String> createAppointment(@RequestParam String userId, @RequestBody Appointment appointment) {
         Long appointmentNo = appointmentService.createAppointment(appointment);
         User u = userService.getUserById(userId);
         uaMapService.setUAMap(appointmentNo, u.getUserNo());
         return ResponseEntity.ok("success");
     }
 
-    // 해당 id를 가진 약속
+    // userid를 가진 약속 리스트
     @GetMapping(value = "/api/appointmentList")
     public @ResponseBody
     ResponseEntity<List<Appointment>> getAppointmentByUserId(@RequestParam String userId) {
@@ -46,13 +46,6 @@ public class AppointmentController {
     @GetMapping(value = "/api/appointment")
     public  ResponseEntity<Appointment> getAppointmentById(@RequestParam Long no) {
         return ResponseEntity.ok(appointmentService.getAppointment(no));
-    }
-
-    //약속 업데이트
-    @PatchMapping("/api/appointment/{no}")
-    public ResponseEntity<String> updateAppointment(@PathVariable("no") Long no, @RequestBody Appointment appointment) {
-        if (appointmentService.updateAppointment(no, appointment) > 0) return ResponseEntity.ok("Success");
-        else return ResponseEntity.ok("Fail");
     }
 
     //약속 삭제

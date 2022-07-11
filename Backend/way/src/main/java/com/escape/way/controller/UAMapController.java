@@ -21,22 +21,26 @@ public class UAMapController {
     UserService userService;
 
     @ResponseBody
-    @RequestMapping(value = "/api/appointment2UserPlaceList", method=RequestMethod.GET)
-    public List<UserPlace> getUserList(@RequestParam(value = "no") String no) {
-        System.out.println(no);
-        long appointmentNo = Long.parseLong(no);
-        System.out.println(appointmentNo);
-        List<Long> res = uaMapService.getUserNoList(appointmentNo);
+    @RequestMapping(value = "/api/appointment2UserPlaceList/{appointmentNo}", method=RequestMethod.GET)
+    public List<UserPlace> updateUserPlace(@PathVariable("appointmentNo") String appointmentNo, @RequestParam String userX, @RequestParam String userY, @RequestParam String userId) {
+        float uX = Float.parseFloat(userX);
+        float uY = Float.parseFloat(userY);
+        userService.updateUser(userId, uX, uY);
 
-        System.out.print("Appointment Mapping User List : ");
-        for(Iterator<Long> iter = res.iterator();iter.hasNext();) {
-            System.out.print(iter.next() + " ");
+        long apNo = Long.parseLong(appointmentNo);
+        List<UserPlace> userPlaceList = new ArrayList<UserPlace>();
+
+        if(apNo >= 0) {  // apNo 존재 --> 리스트
+            List<Long> userList = uaMapService.getUserNoList(apNo);
+            userPlaceList = getUserList2PlaceList(userList);
         }
-        System.out.println(" ");
+        else { // apNo 음수일 때
+            UserPlace up = new UserPlace(userId, uX, uY);
+            userPlaceList.add(up);
+        }
 
-        List<UserPlace> result =getUserList2PlaceList(res);
 
-        return result;
+        return userPlaceList;
     }
 
     public List<UserPlace> getUserList2PlaceList(List<Long> userList) {
