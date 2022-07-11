@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom'
 import { PropTypes } from 'prop-types';
 import Navbar from './Navbar';
-import MyModal from './MyModal';
 
 Header.propTypes = {
     isLoggedIn: PropTypes.bool,
@@ -30,9 +29,9 @@ function Header({isLoggedIn, onLogout}) {
 
     const logoutButton = (
         <li>
-            <a onClick={onLogout}>
+            <button onClick={onLogout}>
                 <i className="material-icons">lock_open</i>
-            </a>
+            </button>
         </li>
     );
 

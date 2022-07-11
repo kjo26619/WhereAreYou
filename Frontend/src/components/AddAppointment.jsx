@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import AppointmentBox from './AppointmentBox';
-import {AppointmentApi, addAppointment, getAppointment} from "../axios/AppointmentApi";
+import {getAppointment} from "../axios/AppointmentApi";
 
 function AddAppointment(){
 
@@ -11,9 +10,9 @@ function AddAppointment(){
                                         placeY: 2.2,
                                     }]);
 
-    const handleClickAdd = () => {
-        addAppointment();
-    }
+    // const handleClickAdd = () => {
+    //     addAppointment();
+    // }
     
     const handleClickGet = () => {
         getAppointment(data, setData);

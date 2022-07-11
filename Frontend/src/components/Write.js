@@ -29,7 +29,7 @@ function Write(){
                     </div>
                 </div>
                 <div className="card-action">
-                    <a>POST</a>
+                    <button>POST</button>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 
@@ -75,7 +75,7 @@ function Authentication({ mode , onLogin, onRegister}) {
     };
 
     const handleKeyPress = (e)=>{
-        if(e.charCode==13) {
+        if(e.charCode===13) {
             console.log('enter pressed');
             if(mode) {
                 HandleLogin(e);
@@ -114,7 +114,7 @@ function Authentication({ mode , onLogin, onRegister}) {
             <div className="card-content">
                 <div className="row">
                     {myInputBox}
-                    <a className="waves-effect waves-light btn" onClick={HandleLogin}>SUBMIT</a>
+                    <button className="waves-effect waves-light btn" onClick={HandleLogin}>SUBMIT</button>
                 </div>
             </div>
 
@@ -133,7 +133,7 @@ function Authentication({ mode , onLogin, onRegister}) {
         <div className="card-content">
             <div className="row">
                 {myInputBox}
-                <a className="waves-effect waves-light btn" onClick={HandleRegister}>CREATE</a>
+                <button className="waves-effect waves-light btn" onClick={HandleRegister}>CREATE</button>
             </div>
         </div>
     );
