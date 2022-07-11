@@ -141,4 +141,6 @@ public class User implements Serializable, UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void setAuth(String role_user) {  }
 }
