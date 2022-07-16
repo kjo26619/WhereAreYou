@@ -1,44 +1,59 @@
 import React, { useEffect } from "react";
-import cn from "classnames";
-import "./Map.scss";
+import Map from './Map';
+import "./MainMap.scss";
 
 const kakao = window.kakao;
 
-const Map = () => {
+const MainMap = () => {
   let marker_list = [];
   let infowindow_list = [];
 
   useEffect(() => {
-    
+    function deleteAllMarker(){
+      marker_list.forEach( (content) => {
+        content.marker.setMap(null);
+      });
+  
+      infowindow_list.forEach( (content) => {
+        content.infowindow.close();
+      });
+  
+      marker_list = [];
+    }
+
     let locPosition;
     let message;
     let nowUser = {
       "userId" : "test123",
-      "x" : 10,
-      "y" : 11,
+      "x" : 127.0507571, //lat
+      "y" : 37.2440589, //lng
     }
 
+    let tmpCnt = 0;
     function tempResponse(user, AppointmentNo){
       let ret = [];
       if(AppointmentNo >= 0){
         ret = [
           {
             "userId": "test1",
-            "x" : 1,
-            "y" : 1,
+            "x" : 37.26361647226481,
+            "y" : 127.02860341503084,
           },
           {
             "userId": "test2",
-            "x" : 2,
-            "y" : 2,
+            "x" : 37.26361647226482,
+            "y" : 127.02870341503085,
           },
-          {
-            "userId": "test3",
-            "x" : 3,
-            "y" : 3,
-          }
+          // {
+          //   "userId": "test3",
+          //   "x" : 37.26362647226491,
+          //   "y" : 127.02860341503094,
+          // }
         ]
       }
+      ret[0].x += (tmpCnt) * 0.0001;
+      ret[1].y += (tmpCnt) * 0.0001;
+      tmpCnt +=1;
       return ret;
     }
 
@@ -105,7 +120,7 @@ const Map = () => {
       });
       infowindow.open(map, marker);
 
-      map.setCenter(locPosition);
+      // map.setCenter(locPosition);
     }
 
     let textbox = document.getElementById("textbox");
@@ -123,12 +138,24 @@ const Map = () => {
     
     let locUpdate = setInterval(() => {
       let ret = getLocPosition();
-      nowUser.x = ret.locPosition.La;
-      nowUser.y = ret.locPosition.Ma;
+      try{
+        nowUser.x = ret.locPosition.La;
+        nowUser.y = ret.locPosition.Ma;
+      }catch{
+        console.log("try test");
+      }
+      deleteAllMarker();
 
-      console.log(nowUser);
+      let retArr = tempResponse(nowUser, 0);
 
-      tempResponse(nowUser, 0);
+      retArr.forEach( content => {
+        let locPosition = new kakao.maps.LatLng(content.x, content.y);
+        
+        // console.log(locPosition);
+        displayMarker(content.userId, locPosition, message);
+
+      });
+      
       //response 받은 배열 돌리면서 현재 마커랑 비교 => 좌표 다르면 지우고 다시보여주고 업데이트 (현재 로그인 유저 포함)
       //marker Map<userId, marker> 형태로 데이터 변경 필요 (CRUD 용이)
     },1000);
@@ -138,11 +165,8 @@ const Map = () => {
   });
 
   return (
-    <div className={cn("Map")}>
-      <div className={cn("MapContainer")} id="map">
-      </div>
-    </div>
+    <Map/>
   );
 };
 
-export default Map;
+export default MainMap;

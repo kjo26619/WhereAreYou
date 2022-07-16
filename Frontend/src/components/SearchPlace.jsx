@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Map from './Map';
 
 const kakao = window.kakao;
 
@@ -26,7 +27,7 @@ function SearchPlace (){
     var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
     // 키워드로 장소를 검색합니다
-    searchPlaces();
+    // searchPlaces();
 
     // 키워드 검색을 요청하는 함수입니다
     function searchPlaces() {
@@ -227,24 +228,27 @@ function SearchPlace (){
         }
     }
 
+    let btnSearch = document.getElementById('btnSearch');
+    btnSearch.onclick= searchPlaces;
 });
     return (
         <div className="map_wrap">
-            <div id="map"></div>
+            <div id="pagination"></div>
+            <Map/>
 
             <div id="menu_wrap" className="bg_white">
                 <div className="option">
                     <div>
-                        <form onSubmit={SearchPlace}>
-                            키워드 : <input type="text" value="수원시청" id="keyword" size="15" onChange={change}/>
-                            <button type="submit">검색하기</button> 
-                        </form>
+                        {/* <form onSubmit={SearchPlace}> */}
+                        키워드 : <input type="text" id="keyword" size="15" onChange={change}/>
+                        <button id="btnSearch">검색하기</button> 
+                        {/* </form> */}
                     </div>
                 </div>
                 <hr/>
-                <ul id="placesList"></ul>
-                <div id="pagination"></div>
             </div>
+            <ul id="placesList"></ul>
+
         </div>
     );
 }
