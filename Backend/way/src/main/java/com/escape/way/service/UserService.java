@@ -3,6 +3,8 @@ package com.escape.way.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.escape.way.error.CustomException;
+import com.escape.way.error.ErrorCode;
 import com.escape.way.model.User;
 import com.escape.way.repository.UserRepository;
 import com.escape.way.vo.UserPlace;
@@ -14,6 +16,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import static com.escape.way.error.ErrorCode.MEMBER_NOT_FOUND;
 
 //@RequiredArgsConstructor
 @Service
@@ -30,9 +34,9 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public User loadUserByUsername(String userId) throws UsernameNotFoundException {
+    public User loadUserByUsername(String userId) {
         return userRepository.findByUserId(userId)
-                .orElseThrow(() -> new UsernameNotFoundException((userId)));
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
     public boolean checkIdDuplicate(String id){
@@ -41,16 +45,17 @@ public class UserService implements UserDetailsService {
 
     public User getUser(Long userNo){
         return userRepository.findById(userNo).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found user"));
+                new CustomException(MEMBER_NOT_FOUND));
     }
 
     public User getUserById(String id){
-        return userRepository.findByUserId(id).orElse(null);
+
+        return userRepository.findByUserId(id)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
     public void updateUser(String id, float userX, float userY){
-        Optional<User> oUser = userRepository.findByUserId(id);
-        User u = oUser.get();
+        User u = getUserById(id);
         u.setUserX(userX);
         u.setUserY(userY);
         userRepository.save(u);
@@ -72,8 +77,7 @@ public class UserService implements UserDetailsService {
     public Optional<User> findByIdPw(String id) { return userRepository.findByUserId(id); }
 
     public UserPlace getUserPlace(Long userNo) {
-        UserPlace result = userRepository.findPlaceById(userNo);
-
-        return result;
+        return userRepository.findPlaceById(userNo)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 }

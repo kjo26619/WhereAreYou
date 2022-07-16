@@ -1,5 +1,7 @@
 package com.escape.way.controller;
 
+import com.escape.way.error.CustomException;
+import com.escape.way.error.ErrorCode;
 import com.escape.way.model.User;
 import com.escape.way.service.UAMapService;
 import com.escape.way.service.UserService;
@@ -22,7 +24,9 @@ public class UAMapController {
 
     @ResponseBody
     @RequestMapping(value = "/api/appointment2UserPlaceList/{appointmentNo}", method=RequestMethod.GET)
-    public List<UserPlace> updateUserPlace(@PathVariable("appointmentNo") String appointmentNo, @RequestParam String userX, @RequestParam String userY, @RequestParam String userId) {
+    public List<UserPlace> updateUserPlace(@PathVariable("appointmentNo") String appointmentNo, @RequestParam String userX, @RequestParam String userY, @RequestParam String userId)
+    throws RuntimeException{
+
         float uX = Float.parseFloat(userX);
         float uY = Float.parseFloat(userY);
         userService.updateUser(userId, uX, uY);
@@ -32,6 +36,8 @@ public class UAMapController {
 
         if(apNo >= 0) {  // apNo 존재 --> 리스트
             List<Long> userList = uaMapService.getUserNoList(apNo);
+            if (userList.isEmpty()) { throw new CustomException(ErrorCode.INVALID_APPOINTMENT_NO); }
+
             userPlaceList = getUserList2PlaceList(userList);
         }
         else { // apNo 음수일 때

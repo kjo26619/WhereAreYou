@@ -1,5 +1,7 @@
 package com.escape.way.service;
 
+import com.escape.way.error.CustomException;
+import com.escape.way.error.ErrorCode;
 import com.escape.way.model.Appointment;
 import com.escape.way.model.UAMap;
 import com.escape.way.model.User;
@@ -30,9 +32,7 @@ public class UAMapService {
     public List<Long> getUserNoList(Long appointmentNo){
         // Appointment No -> User ID
 
-        List<Long> userNoList = uaMapRepository.findAllByAppointmentId(appointmentNo);
-
-        return userNoList;
+        return uaMapRepository.findAllByAppointmentId(appointmentNo);
 
     }
 }
