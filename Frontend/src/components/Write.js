@@ -1,5 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import { SearchPlace } from '../components'
 
 Write.propTypes = {
     onPost: PropTypes.func
@@ -15,17 +16,11 @@ function Write({ onPost }) {
         setMemoName(e.target.value);
         console.log('Appointment Name: ', { MemoName });
     }
-    const [isOpen, setState] = React.useState(true);
-    const toggleState = () => {
-        setState(isOpen => !isOpen);
-        console.log('toggled ! : ', { isOpen });
-    }
     const handlePost = () => {
-        let contents = { name: MemoName, open: isOpen };
+        let contents = { name: MemoName };
         onPost(contents).then(
             () => {
                 setMemoName("");
-                setState(false);
             }
         )
     }
@@ -38,13 +33,8 @@ function Write({ onPost }) {
                         placeholder="약속 이름을 입력하세요"
                         value={MemoName}
                         onChange={handleMemoName}></textarea>
-                    <textarea className="materialize-textarea" placeholder="약속 장소를 입력하세요"></textarea>
-                    <div className="toggleBox">
-                        <div className={isOpen ? 'toggleBG' : 'toggleBG_On'} onClick={toggleState}>
-                            <button id='buttonID' className={isOpen ? 'toggleFG' : 'toggleFG_On'}></button>
-                        </div>
-                        <div className='explain'>공개 할까요? : {isOpen ? '아니요' : '예'}</div>
-                    </div>
+                    
+                    <SearchPlace />
                 </div>
                 <div className="card-action">
                     <a onClick={handlePost}>POST</a>

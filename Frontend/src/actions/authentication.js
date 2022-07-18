@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as types from './ActionTypes';
 
-const baseURL = "http://localhost:8081/api";
+const baseURL = "http://ec2-54-180-143-120.ap-northeast-2.compute.amazonaws.com/api";
 
 /* LOGIN */
 export function loginRequest(userId, password) {
