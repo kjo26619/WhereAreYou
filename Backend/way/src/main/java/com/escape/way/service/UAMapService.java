@@ -33,6 +33,11 @@ public class UAMapService {
         // Appointment No -> User ID
 
         return uaMapRepository.findAllByAppointmentId(appointmentNo);
+    }
 
+    public boolean existUAMap(Long appointmentNo, Long userNo) {
+        Long res = uaMapRepository.existsUAMap(appointmentNo , userNo);
+        if(res == null) return true;
+        else return false;
     }
 }
