@@ -8,16 +8,19 @@ import {
 } from './ActionTypes';
 import axios from 'axios';
 
-const baseURL = "http://localhost:8080/api";
+const baseURL = "http://localhost:8081/api";
 
 /* MEMO POST */
 export function memoPostRequest(contents) {
     const url = baseURL + '/appointment'
+    const param = {
+        userId: 'hyun'
+    }
+    console.log('[memo request] url :', url, 'Content:', contents, 'param:', param);
     return (dispatch) => {
        // inform MEMO POST API is starting
         dispatch(memoPost());
-
-        return axios.post(url, { contents }, {credential:true})
+        return axios.post(url, contents, {params: param}, {credential:true})
         .then((response) => {
             dispatch(memoPostSuccess());
         }).catch((error) => {

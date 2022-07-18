@@ -17,7 +17,12 @@ function Write({ onPost }) {
         console.log('Appointment Name: ', { MemoName });
     }
     const handlePost = () => {
-        let contents = { name: MemoName };
+        let contents = {
+            "name": MemoName,
+            "placeName": "ARA'S HOUSE",
+            "placeX": 2.2,
+            "placeY" : 3.3
+        }
         onPost(contents).then(
             () => {
                 setMemoName("");
