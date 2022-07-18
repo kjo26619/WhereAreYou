@@ -3,6 +3,7 @@ package com.escape.way.controller;
 import com.escape.way.config.RedisUtil;
 import com.escape.way.config.TokenUtil;
 import com.escape.way.dto.TokenResponse;
+import com.escape.way.dto.UserAuthRequest;
 import com.escape.way.error.CustomException;
 import com.escape.way.error.ErrorCode;
 import com.escape.way.error.ErrorResponse;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +40,10 @@ public class AuthController {
     private RedisUtil redisUtil;
 
     @RequestMapping(value = "/api/auth", method= RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestParam String userId, @RequestParam String password) throws RuntimeException {
+    public ResponseEntity<?> createAuthenticationToken(UserAuthRequest userInfo) throws RuntimeException {
+        String userId = userInfo.getUserId();
+        String password = userInfo.getPassword();
+
         try {
             authenticate(userId, password);
         }
