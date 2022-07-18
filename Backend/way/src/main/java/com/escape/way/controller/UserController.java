@@ -1,5 +1,6 @@
 package com.escape.way.controller;
 
+import com.escape.way.dto.UserRegisterRequest;
 import com.escape.way.model.User;
 import com.escape.way.service.UAMapService;
 import com.escape.way.service.UserService;
@@ -31,11 +32,11 @@ public class UserController {
 
   //가입
   @PostMapping(value = "/api/join")
-  public ResponseEntity<String> join(@RequestParam String userId, @RequestParam String password, @RequestParam String name){
+  public ResponseEntity<String> join(UserRegisterRequest userInfo){
     User user = new User();
-    user.setUserId(userId);
-    user.setName(name);
-    user.setPw(password);
+    user.setUserId(userInfo.getUserId());
+    user.setName(userInfo.getName());
+    user.setPw(userInfo.getPassword());
 
     user.setUserX(0);
     user.setUserY(0);
