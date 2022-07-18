@@ -17,5 +17,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
     boolean existsByUserId(String userId);
 
     @Query("SELECT new com.escape.way.vo.UserPlace(u.userId, u.userX, u.userY) FROM User u WHERE u.userNo = :user_no")
-    UserPlace findPlaceById(@Param("user_no") Long userNo);
+    Optional<UserPlace> findPlaceById(@Param("user_no") Long userNo);
 }
