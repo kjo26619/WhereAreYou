@@ -13,4 +13,15 @@ public class PlaceListResponse implements Serializable {
 
     private UserPlace[] userPlaceList = new UserPlace[10];
 
+    @Override
+    public String toString() {
+        String result = "reqUserId : " + reqUserId;
+
+        for (int i = 0; i < 10; i++) {
+            if (userPlaceList[i].getUserId() == null) break;
+            result += userPlaceList[i].toString() + "\r\n";
+        }
+
+        return result;
+    }
 }

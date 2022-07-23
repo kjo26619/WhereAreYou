@@ -2,6 +2,8 @@ package com.escape.way.filter;
 
 import com.escape.way.config.RedisUtil;
 import com.escape.way.config.TokenUtil;
+import com.escape.way.error.CustomException;
+import com.escape.way.error.ErrorCode;
 import com.escape.way.model.User;
 import com.escape.way.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -35,8 +37,6 @@ public class WayAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Enumeration<String> params = request.getParameterNames();
         String accessToken = null;
-        String refreshToken = null;
-
         String userId = null;
 
 
@@ -46,9 +46,6 @@ public class WayAuthenticationFilter extends OncePerRequestFilter {
                 accessToken = request.getParameter(key);
                 System.out.println(key);
                 System.out.println(accessToken);
-            }
-            else if(key.equals("RefreshToken")) {
-                refreshToken = request.getParameter(key);
             }
         }
 
@@ -72,27 +69,6 @@ public class WayAuthenticationFilter extends OncePerRequestFilter {
             System.out.println(e.toString());
         }
 
-        /*
-        try {
-            if (refreshToken != null) {
-                userId = redisUtil.getData(refreshToken);
-
-                if (userId.equals(tokenUtil.getUsernameFromToken(refreshToken))) {
-                    User user = userService.loadUserByUsername(userId);
-
-                    UsernamePasswordAuthenticationToken upaToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    upaToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(upaToken);
-
-                    String returnAccessToken = tokenUtil.generateAccessToken(user);
-
-                    request.setAttribute("AccessToken", returnAccessToken);
-                }
-            }
-        }catch(ExpiredJwtException e) {
-            e.getMessage();
-        }
-        */
         filterChain.doFilter(request, response);
     }
 }

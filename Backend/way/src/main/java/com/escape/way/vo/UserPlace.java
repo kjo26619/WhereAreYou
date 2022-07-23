@@ -34,4 +34,9 @@ public  class UserPlace{
     public void setUserY(float userY) {
         this.userY = userY;
     }
+
+    @Override
+    public String toString() {
+        return "userId : " + this.userId + " | userX : " + this.userX + " | userY : " + this.userY;
+    }
 }
