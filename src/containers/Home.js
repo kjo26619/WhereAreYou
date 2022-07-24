@@ -1,5 +1,5 @@
 import React from 'react';
-import Map from '../components/MainMap'
+import Map from '../components/Map/Map'
 import AppointmentBox from '../components/AppointmentBox';
 
 function Home() {
