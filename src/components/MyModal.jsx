@@ -1,6 +1,6 @@
 import React from "react";
 import ReactModal from 'react-modal';
-import Map from "./MainMap";
+import Map from "./Map/Map";
 import SearchPlace from "./SearchPlace";
 
 function MyModal({isOpen, onSubmit, onCancel }){

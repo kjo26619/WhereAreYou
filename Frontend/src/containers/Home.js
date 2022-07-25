@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Map from '../components/Map/Map'
-import { AppointmentList } from '../components';
-import AppointmentBox from '../components/AppointmentBox';
+import Map from '../components/MainMap'
 import { memoListRequest} from '../actions/memo'
+import { AppointmentList } from '../components';
 
 // isLoggedIn={this.props.status.isLoggedIn}
 // userId={this.props.status.username}

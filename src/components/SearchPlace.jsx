@@ -1,17 +1,9 @@
 import React, { useEffect } from 'react';
-import { PropTypes } from 'prop-types';
-import Map from './Map';
 
 const kakao = window.kakao;
 
-SearchPlace.propTypes = {
-    onPost: PropTypes.func
-};
-SearchPlace.defaultProps = {
-    onPost: (place) => { console.error('return function not defined'); }
-};
-
-function SearchPlace ({onPost}){
+function SearchPlace (){
+    
     function change(){
 
     }
@@ -34,7 +26,7 @@ function SearchPlace ({onPost}){
     var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
     // 키워드로 장소를 검색합니다
-    // searchPlaces();
+    searchPlaces();
 
     // 키워드 검색을 요청하는 함수입니다
     function searchPlaces() {
@@ -120,14 +112,7 @@ function SearchPlace ({onPost}){
                     infowindow.close();
                 };
                 itemEl.onclick = function (){
-                    console.log('placeName: ', place.place_name);
-                    console.log('placeX: ', place.x, 'placeY: ', place.y);
-                    let placeData = {
-                        "placeName": place.place_name,
-                        "placeX": place.x,
-                        "placeY": place.y
-                    };
-                    onPost(placeData);
+                    console.log(marker);
                 };
             })(marker, place);
 
@@ -242,27 +227,24 @@ function SearchPlace ({onPost}){
         }
     }
 
-    let btnSearch = document.getElementById('btnSearch');
-    btnSearch.onclick= searchPlaces;
 });
     return (
         <div className="map_wrap">
-            <div id="pagination"></div>
-            <Map/>
+            <div id="map"></div>
 
             <div id="menu_wrap" className="bg_white">
                 <div className="option">
                     <div>
-                        {/* <form onSubmit={SearchPlace}> */}
-                        키워드 : <input type="text" id="keyword" size="15" onChange={change}/>
-                        <button id="btnSearch">검색하기</button> 
-                        {/* </form> */}
+                        <form onSubmit={SearchPlace}>
+                            키워드 : <input type="text" value="수원시청" id="keyword" size="15" onChange={change}/>
+                            <button type="submit">검색하기</button> 
+                        </form>
                     </div>
                 </div>
                 <hr/>
+                <ul id="placesList"></ul>
+                <div id="pagination"></div>
             </div>
-            <ul id="placesList"></ul>
-
         </div>
     );
 }
