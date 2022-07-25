@@ -136,8 +136,11 @@ const MainMap = () => {
       displayMarker(latlng, marker_list.length + "번째");
     });
     
+    
     let locUpdate = setInterval(() => {
       let ret = getLocPosition();
+      let bounds = new kakao.maps.LatLngBounds();
+
       try{
         nowUser.x = ret.locPosition.La;
         nowUser.y = ret.locPosition.Ma;
@@ -150,12 +153,14 @@ const MainMap = () => {
 
       retArr.forEach( content => {
         let locPosition = new kakao.maps.LatLng(content.x, content.y);
+        bounds.extend(locPosition);
         
         // console.log(locPosition);
         displayMarker(content.userId, locPosition, message);
 
       });
       
+      map.setBounds(bounds);
       //response 받은 배열 돌리면서 현재 마커랑 비교 => 좌표 다르면 지우고 다시보여주고 업데이트 (현재 로그인 유저 포함)
       //marker Map<userId, marker> 형태로 데이터 변경 필요 (CRUD 용이)
     },1000);

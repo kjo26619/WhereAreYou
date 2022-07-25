@@ -12,6 +12,7 @@ function InvitedPage(){
     if(location.state?.from){
         code = String(location.state.from.pathname).split("/")[2];
         addUser(code);
+        console.log(code);
     }
 
     return (
