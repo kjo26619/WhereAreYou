@@ -142,5 +142,8 @@ public class User implements Serializable, UserDetails {
         return true;
     }
 
-    public void setAuth(String role_user) {  }
+    public void setAuth(String role_user) {
+        this.auth = role_user;
+
+    }
 }
