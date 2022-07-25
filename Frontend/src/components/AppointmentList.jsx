@@ -1,13 +1,32 @@
 import React from 'react';
-import "./AppointmentList.scss";
-import ListView from './ListView';
+import {Appointment} from '../components'
+import { PropTypes } from 'prop-types';
 
-function AppointmentList(){
+function AppointmentList({data, currentUser}){
+    const mapToComponents = data =>{
+        return data.map((appointment, i) =>{
+            return (<Appointment data={appointment} 
+                owenership={(appointment.writer === currentUser)}
+                key={appointment._id}
+            />);
+        });
+    };
+
     return(
         <div className="AppointmentList" >
-            <ListView/>
+            {mapToComponents(data)}
         </div>
     );
+};
+
+AppointmentList.propTypes = {
+    data:PropTypes.array,
+    currentUser: PropTypes.string
+};
+
+AppointmentList.defaultProps = {
+    data: [],
+    currentUser: ''
 };
 
 export default AppointmentList;

@@ -26,6 +26,8 @@ public class AppointmentController {
     //약속 생성
     @PostMapping(value = "/api/appointment")
     public @ResponseBody ResponseEntity<String> createAppointment(@RequestParam String userId, @RequestBody Appointment appointment) {
+        System.out.println(userId + " , " + appointment.getPlaceName());
+        
         Long appointmentNo = appointmentService.createAppointment(appointment);
         User u = userService.getUserById(userId);
         uaMapService.setUAMap(appointmentNo, u.getUserNo());
