@@ -2,6 +2,7 @@ package com.escape.way.controller;
 
 import com.escape.way.config.RedisUtil;
 import com.escape.way.config.TokenUtil;
+import com.escape.way.config.logging.LogEntry;
 import com.escape.way.dto.TokenResponse;
 import com.escape.way.dto.UserAuthRequest;
 import com.escape.way.error.CustomException;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.time.temporal.ChronoUnit;
 
 @Controller
 public class AuthController {
@@ -40,6 +42,7 @@ public class AuthController {
     private RedisUtil redisUtil;
 
     @RequestMapping(value = "/api/auth", method= RequestMethod.POST)
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public ResponseEntity<?> createAuthenticationToken(UserAuthRequest userInfo) throws RuntimeException {
         String userId = userInfo.getUserId();
         String password = userInfo.getPassword();

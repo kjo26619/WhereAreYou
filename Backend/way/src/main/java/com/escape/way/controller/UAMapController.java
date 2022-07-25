@@ -1,5 +1,6 @@
 package com.escape.way.controller;
 
+import com.escape.way.config.logging.LogEntry;
 import com.escape.way.error.CustomException;
 import com.escape.way.error.ErrorCode;
 import com.escape.way.model.User;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +26,7 @@ public class UAMapController {
 
     @ResponseBody
     @RequestMapping(value = "/api/appointment2UserPlaceList/{appointmentNo}", method=RequestMethod.GET)
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public List<UserPlace> updateUserPlace(@PathVariable("appointmentNo") String appointmentNo, @RequestParam String userX, @RequestParam String userY, @RequestParam String userId)
     throws RuntimeException{
 

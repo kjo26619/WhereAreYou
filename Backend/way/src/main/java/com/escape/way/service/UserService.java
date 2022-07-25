@@ -1,8 +1,10 @@
 package com.escape.way.service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import com.escape.way.config.logging.LogEntry;
 import com.escape.way.error.CustomException;
 import com.escape.way.error.ErrorCode;
 import com.escape.way.model.User;
@@ -26,6 +28,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public User joinUser(User user){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPw(encoder.encode(user.getPassword()));
@@ -76,6 +79,7 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> findByIdPw(String id) { return userRepository.findByUserId(id); }
 
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public UserPlace getUserPlace(Long userNo) {
         return userRepository.findPlaceById(userNo)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));

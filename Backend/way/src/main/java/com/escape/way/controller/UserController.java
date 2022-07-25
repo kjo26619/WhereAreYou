@@ -1,10 +1,12 @@
 package com.escape.way.controller;
 
+import com.escape.way.config.logging.LogEntry;
 import com.escape.way.dto.UserRegisterRequest;
 import com.escape.way.model.User;
 import com.escape.way.service.UAMapService;
 import com.escape.way.service.UserService;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +34,7 @@ public class UserController {
 
   //가입
   @PostMapping(value = "/api/join")
+  @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
   public ResponseEntity<String> join(UserRegisterRequest userInfo){
     User user = new User();
     user.setUserId(userInfo.getUserId());

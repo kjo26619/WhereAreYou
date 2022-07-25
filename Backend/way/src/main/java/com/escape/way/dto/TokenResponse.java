@@ -25,4 +25,9 @@ public class TokenResponse implements Serializable {
     public String getRefreshToken() {
         return this.refreshToken;
     }
+
+    @Override
+    public String toString() {
+        return "name : " + this.name + " | AccessToken : " + this.accessToken + " | RefreshToken : " + this.refreshToken;
+    }
 }
