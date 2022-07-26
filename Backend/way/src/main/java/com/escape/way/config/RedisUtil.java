@@ -12,12 +12,12 @@ public class RedisUtil {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    public String getData(String key) {
+    public String getData(String key) throws Exception {
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         return valueOperations.get(key);
     }
 
-    public void setData(String key, String value) {
+    public void setData(String key, String value) throws Exception {
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         valueOperations.set(key, value);
     }

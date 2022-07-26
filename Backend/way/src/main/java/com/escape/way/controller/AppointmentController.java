@@ -1,5 +1,6 @@
 package com.escape.way.controller;
 
+import com.escape.way.config.logging.LogEntry;
 import com.escape.way.dto.AppointmentRe;
 import com.escape.way.error.CustomException;
 import com.escape.way.error.ErrorCode;
@@ -10,12 +11,13 @@ import com.escape.way.service.UAMapService;
 import com.escape.way.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+@RequestMapping(value = "/api/appointment/*")
 @Controller
 public class AppointmentController {
 
@@ -27,7 +29,8 @@ public class AppointmentController {
     UserService userService;
 
     //약속 생성
-    @PostMapping(value = "/api/appointment")
+    @PostMapping(value = "/create")
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public @ResponseBody ResponseEntity<String> createAppointment(@RequestParam String userId, @RequestBody Appointment appointment) throws Exception {
         Long appointmentNo = appointmentService.createAppointment(appointment);
         User u = userService.getUserById(userId);
@@ -36,7 +39,8 @@ public class AppointmentController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/api/appointment/user", method=RequestMethod.GET)
+    @RequestMapping(value = "/addUser", method=RequestMethod.GET)
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public AppointmentRe addUser(@RequestParam Long no, @RequestParam String userId) throws Exception {
         //1. user id로 user no 검색
         User u = userService.getUserById(userId);
@@ -49,29 +53,37 @@ public class AppointmentController {
         }else throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         //4. no 해당하는 약속정보 가져와서 return
         Appointment a = appointmentService.getAppointment(no);
-        AppointmentRe appointment = new AppointmentRe(a.getAppointmentNo(), a.getName(), a.getPlaceName(), a.getPlaceX(), a.getPlaceY());
+        AppointmentRe appointment = new AppointmentRe(a.getAppointmentNo(), a.getName(), a.getPlaceName(), a.getLatitude(), a.getLongitude());
 
         return appointment;
     }
 
     // userid를 가진 약속 리스트
-    @GetMapping(value = "/api/appointmentList")
+    // 구현 예정
+    @RequestMapping(value = "/getAppointmentList", method=RequestMethod.GET)
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public @ResponseBody
-    ResponseEntity<List<Appointment>> getAppointmentByUserId(@RequestParam String userId) {
-        List<Appointment> appointments = appointmentService.getAppointmentList(userId);
-        if(appointments == null) return ResponseEntity.badRequest().build();
+    ResponseEntity<List<Appointment>> getAppointmentByUserId(@RequestParam String userId) throws Exception {
+        try {
+            List<Appointment> appointments = appointmentService.getAppointmentList(userId);
+            if(appointments == null) return ResponseEntity.badRequest().build();
 
-        return ResponseEntity.ok(appointments);
+            return ResponseEntity.ok(appointments);
+        }
+        catch(Exception e) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
     }
 
-    // userID에 해당되는 약속 List
-    @GetMapping(value = "/api/appointment")
+    // appointment ID에 해당되는 약속
+    // 구현 예정
+    @RequestMapping(value = "/getAppointment", method=RequestMethod.GET)
     public  ResponseEntity<Appointment> getAppointmentById(@RequestParam Long no) {
         return ResponseEntity.ok(appointmentService.getAppointment(no));
     }
 
-    //약속 삭제
-    @DeleteMapping("/api/appointment/{no}")
+    // 약속 삭제
+    @RequestMapping(value="/{no}", method=RequestMethod.DELETE)
     public ResponseEntity<String> deleteAppointment(@PathVariable("no") Long no) {
 
         if (appointmentService.deleteAppointment(no) > 0) return ResponseEntity.ok("Success");

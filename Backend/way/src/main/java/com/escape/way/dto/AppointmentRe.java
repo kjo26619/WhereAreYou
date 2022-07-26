@@ -4,15 +4,15 @@ public class AppointmentRe {
     private Long appointmentNo;
     private String name;
     private String placeName;
-    private float placeX;
-    private float placeY;
+    private double latitude;
+    private double longitude;
 
-    public AppointmentRe(Long appointmentNo, String name, String placeName, float placeX, float placeY) {
+    public AppointmentRe(Long appointmentNo, String name, String placeName, double latitude, double longitude) {
         this.appointmentNo = appointmentNo;
         this.name = name;
         this.placeName = placeName;
-        this.placeX = placeX;
-        this.placeY = placeY;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public Long getAppointmentNo() {
@@ -39,19 +39,11 @@ public class AppointmentRe {
         this.placeName = placeName;
     }
 
-    public float getPlaceX() {
-        return placeX;
-    }
+    public double getLatitude() { return this.latitude; }
 
-    public void setPlaceX(float placeX) {
-        this.placeX = placeX;
-    }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
 
-    public float getPlaceY() {
-        return placeY;
-    }
+    public double getLongitude() { return this.longitude; }
 
-    public void setPlaceY(float placeY) {
-        this.placeY = placeY;
-    }
+    public void setLongitude(double longitude) { this.longitude = longitude; }
 }

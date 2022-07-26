@@ -26,60 +26,19 @@ public class User implements Serializable, UserDetails {
     @Column
     private String name;
     private String pw;
-    private float userX;
-    private float userY;
     private Long kakaoId;
     private String auth;
+
+    @Column(precision = 17, scale = 14)
+    private double latitude;
+    @Column(precision = 17, scale = 14)
+    private double longitude;
 
     @Column(unique = true)
     private String userId;
 
     @OneToMany(mappedBy = "user")
     private List<UAMap> uamaps = new ArrayList<UAMap>();
-
-    public Long getUserNo() { return userNo; }
-
-    public void setUserNo(Long userNo) { this.userNo = userNo; }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getPw() {
-        return pw;
-    }
-
-    public void setPw(String pw) {
-        this.pw = pw;
-    }
-
-    public float getUserX() {
-        return userX;
-    }
-
-    public void setUserX(float userX) {
-        this.userX = userX;
-    }
-
-    public float getUserY() {
-        return userY;
-    }
-
-    public void setUserY(float userY) {
-        this.userY = userY;
-    }
 
     public List<UAMap> getUamaps() {
         return uamaps;
@@ -97,7 +56,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public String toString() {
-        return this.name + ", " + this.pw + ", " + this.userId + ", " + this.getUserX() + ", " + this.getUserY() + ", " + this.getKakaoId();
+        return this.name + ", " + this.pw + ", " + this.userId + ", " + this.latitude + ", " + this.longitude + ", " + this.kakaoId;
     }
 
     //sprint security
@@ -144,6 +103,5 @@ public class User implements Serializable, UserDetails {
 
     public void setAuth(String role_user) {
         this.auth = role_user;
-
     }
 }

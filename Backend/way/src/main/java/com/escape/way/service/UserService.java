@@ -57,10 +57,11 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
-    public void updateUser(String id, float userX, float userY){
+    public void updateUser(String id, double latitude, double longitude){
         User u = getUserById(id);
-        u.setUserX(userX);
-        u.setUserY(userY);
+        u.setLatitude(latitude);
+        u.setLongitude(longitude);
+
         userRepository.save(u);
     }
 

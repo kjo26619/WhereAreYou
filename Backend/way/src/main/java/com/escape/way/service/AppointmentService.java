@@ -31,6 +31,7 @@ public class AppointmentService {
     public List<Appointment> getAppointmentList(String userId){
 //        - userID에 해당하는 appointmentList API -> appointmentList(Service)
         List<Appointment> appointmentList = null;
+
         if(!userRepository.existsByUserId(userId)) return appointmentList;
         else {
             Long userNo = userRepository.findByUserId(userId).get().getUserNo();

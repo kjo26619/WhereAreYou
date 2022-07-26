@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@RequestMapping("/api/appointmentUserMap/*")
 @Controller
 public class UAMapController {
     @Autowired
@@ -25,14 +26,14 @@ public class UAMapController {
     UserService userService;
 
     @ResponseBody
-    @RequestMapping(value = "/api/appointment2UserPlaceList/{appointmentNo}", method=RequestMethod.GET)
+    @RequestMapping(value = "/{appointmentNo}", method=RequestMethod.GET)
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
-    public List<UserPlace> updateUserPlace(@PathVariable("appointmentNo") String appointmentNo, @RequestParam String userX, @RequestParam String userY, @RequestParam String userId)
+    public List<UserPlace> updateUserPlace(@PathVariable("appointmentNo") String appointmentNo, @RequestParam String latitude, @RequestParam String longitude, @RequestParam String userId)
     throws RuntimeException{
 
-        float uX = Float.parseFloat(userX);
-        float uY = Float.parseFloat(userY);
-        userService.updateUser(userId, uX, uY);
+        double uLatitude = Double.parseDouble(latitude);
+        double uLongitude = Double.parseDouble(longitude);
+        userService.updateUser(userId, uLatitude, uLongitude);
 
         long apNo = Long.parseLong(appointmentNo);
         List<UserPlace> userPlaceList = new ArrayList<UserPlace>();
@@ -44,10 +45,9 @@ public class UAMapController {
             userPlaceList = getUserList2PlaceList(userList);
         }
         else { // apNo 음수일 때
-            UserPlace up = new UserPlace(userId, uX, uY);
+            UserPlace up = new UserPlace(userId, uLatitude, uLongitude);
             userPlaceList.add(up);
         }
-
 
         return userPlaceList;
     }

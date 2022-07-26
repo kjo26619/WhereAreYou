@@ -2,6 +2,8 @@ package com.escape.way.controller;
 
 import com.escape.way.config.logging.LogEntry;
 import com.escape.way.dto.UserRegisterRequest;
+import com.escape.way.error.CustomException;
+import com.escape.way.error.ErrorCode;
 import com.escape.way.model.User;
 import com.escape.way.service.UAMapService;
 import com.escape.way.service.UserService;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+@RequestMapping("/api/user/*")
 @Controller
 public class UserController {
 
@@ -33,16 +35,22 @@ public class UserController {
   UAMapService uaMapService;
 
   //가입
-  @PostMapping(value = "/api/join")
+  @RequestMapping(value = "/join", method = RequestMethod.POST)
   @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
-  public ResponseEntity<String> join(UserRegisterRequest userInfo){
+  public ResponseEntity<String> join(UserRegisterRequest userInfo) throws RuntimeException{
+
+    if (userService.checkIdDuplicate(userInfo.getUserId())) {
+      throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+    }
+
     User user = new User();
     user.setUserId(userInfo.getUserId());
     user.setName(userInfo.getName());
     user.setPw(userInfo.getPassword());
 
-    user.setUserX(0);
-    user.setUserY(0);
+    user.setLatitude(0);
+    user.setLongitude(0);
+
     user.setAuth("ROLE_USER");
     user.setKakaoId(1L);
 
@@ -50,26 +58,22 @@ public class UserController {
     return ResponseEntity.ok("Success");
   }
 
-  @GetMapping(value = "/api/logout")
+  // 구현 예정
+  @RequestMapping(value = "/logout", method = RequestMethod.GET)
   public String logoutPage(HttpServletRequest req, HttpServletResponse res) {
     new SecurityContextLogoutHandler().logout(req, res, SecurityContextHolder.getContext().getAuthentication());
     return "redirect:/login";
   }
 
-  // 해당 id를 가진 유저
-  @GetMapping(value = "/api/user")
-  public ResponseEntity<User> getUserById(@RequestParam String id) {
-    return ResponseEntity.ok(userService.getUserById(id));
-  }
-
   // 중복 확인
-  @GetMapping(value = "/api/user/exists")
+  @RequestMapping(value = "/exists", method = RequestMethod.GET)
+  @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
   public ResponseEntity<Boolean> checkIdDuplicate(@RequestParam String id) {
     return ResponseEntity.ok(userService.checkIdDuplicate(id));
   }
 
   //유저 삭제
-  @DeleteMapping("/api/user/{id}")
+  @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public ResponseEntity<String> deleteUser(@PathVariable("id") String id) {
     if (userService.deleteUser(id) > 0) return ResponseEntity.ok("Success");
     else return ResponseEntity.ok("Fail");

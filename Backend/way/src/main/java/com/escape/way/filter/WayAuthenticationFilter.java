@@ -65,7 +65,7 @@ public class WayAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(upaToken);
                 }
             }
-        }catch(ExpiredJwtException e) {
+        }catch(Exception e) {
             System.out.println(e.toString());
         }
 
