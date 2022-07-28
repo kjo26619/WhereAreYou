@@ -52,7 +52,6 @@ public class UserService implements UserDetailsService {
     }
 
     public User getUserById(String id){
-
         return userRepository.findByUserId(id)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }

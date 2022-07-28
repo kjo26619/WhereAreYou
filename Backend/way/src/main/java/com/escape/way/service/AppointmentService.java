@@ -1,6 +1,10 @@
 package com.escape.way.service;
 
+import com.escape.way.dto.AppointmentRe;
+import com.escape.way.error.CustomException;
+import com.escape.way.error.ErrorCode;
 import com.escape.way.model.Appointment;
+import com.escape.way.model.User;
 import com.escape.way.repository.AppointmentRepository;
 import com.escape.way.repository.UAMapRepository;
 import com.escape.way.repository.UserRepository;
@@ -11,6 +15,9 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.text.html.Option;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,25 +27,28 @@ public class AppointmentService {
     
     @Autowired
     private AppointmentRepository appointmentRepository;
-    private UserRepository userRepository;
-    private UAMapRepository uaMapRepository;
+    @Autowired
+    private UAMapService uaMapService;
+    @Autowired
+    private UserService userService;
 
     public Appointment getAppointment(Long no){
         return appointmentRepository.findById(no).orElseThrow(() ->
-            new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found appointment"));
+            new CustomException(ErrorCode.INVALID_APPOINTMENT_NO));
     }
 
-    public List<Appointment> getAppointmentList(String userId){
+    public List<Appointment> getAppointmentList(String userId) throws Exception{
 //        - userID에 해당하는 appointmentList API -> appointmentList(Service)
-        List<Appointment> appointmentList = null;
+        List<Appointment> appointmentList = new ArrayList<>();
 
-        if(!userRepository.existsByUserId(userId)) return appointmentList;
-        else {
-            Long userNo = userRepository.findByUserId(userId).get().getUserNo();
-//            List<Long> appointmentIds = uaMapRepository.findByUserNo(userNo);
-//            appointmentList = appointmentRepository.findAllByAppointmentNoMatches(appointmentIds);
+        User user = userService.getUserById(userId);
+        Long userNo = user.getUserNo();
+        List<Long> appointmentIdList = uaMapService.getAppointmentNoListByUserNo(userNo);
 
+        for (Iterator<Long> iter = appointmentIdList.iterator(); iter.hasNext();) {
+            appointmentList.add(getAppointment(iter.next()));
         }
+
         return appointmentList;
     }
 

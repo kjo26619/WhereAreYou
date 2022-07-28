@@ -42,4 +42,8 @@ public class UAMapService {
         if(res == null) return true;
         else return false;
     }
+
+    public List<Long> getAppointmentNoListByUserNo(Long no) {
+        return uaMapRepository.findAppointmentListByUserNo(no);
+    }
 }

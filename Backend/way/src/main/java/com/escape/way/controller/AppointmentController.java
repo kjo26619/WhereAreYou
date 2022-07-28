@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @RequestMapping(value = "/api/appointment/*")
@@ -59,20 +61,26 @@ public class AppointmentController {
     }
 
     // userid를 가진 약속 리스트
-    // 구현 예정
-    @RequestMapping(value = "/getAppointmentList", method=RequestMethod.GET)
+    @RequestMapping(value = "/getList", method=RequestMethod.GET)
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public @ResponseBody
-    ResponseEntity<List<Appointment>> getAppointmentByUserId(@RequestParam String userId) throws Exception {
-        try {
-            List<Appointment> appointments = appointmentService.getAppointmentList(userId);
-            if(appointments == null) return ResponseEntity.badRequest().build();
+    ResponseEntity<List<AppointmentRe>> getAppointmentByUserId(@RequestParam String userId) throws Exception {
 
-            return ResponseEntity.ok(appointments);
+        List<Appointment> appointments = appointmentService.getAppointmentList(userId);
+        List<AppointmentRe> listResponse = new ArrayList<>();
+
+        for (Iterator<Appointment> iter = appointments.iterator(); iter.hasNext();) {
+            Appointment temp = iter.next();
+
+            AppointmentRe appointmentRe = new AppointmentRe(temp.getAppointmentNo(),
+                    temp.getName(), temp.getPlaceName(), temp.getLatitude(), temp.getLongitude());
+            listResponse.add(appointmentRe);
         }
-        catch(Exception e) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        }
+
+        if(appointments == null)
+            return ResponseEntity.badRequest().build();
+
+        return ResponseEntity.ok(listResponse);
     }
 
     // appointment ID에 해당되는 약속
