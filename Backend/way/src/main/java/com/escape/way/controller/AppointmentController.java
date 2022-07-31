@@ -10,12 +10,18 @@ import com.escape.way.service.AppointmentService;
 import com.escape.way.service.UAMapService;
 import com.escape.way.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,13 +36,22 @@ public class AppointmentController {
     @Autowired
     UserService userService;
 
+    @Value("${time.timezone}")
+    String timezone = "Asia/Seoul";
+
     //약속 생성
     @PostMapping(value = "/create")
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
-    public @ResponseBody ResponseEntity<String> createAppointment(@RequestParam String userId, @RequestBody Appointment appointment) throws Exception {
+    public @ResponseBody ResponseEntity<String> createAppointment(
+            @RequestParam String userId, @RequestBody Appointment appointment) throws Exception {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String curTime = ZonedDateTime.now(ZoneId.of(timezone)).format(formatter);
+
+        appointment.setUpdateTime(curTime);
         Long appointmentNo = appointmentService.createAppointment(appointment);
         User u = userService.getUserById(userId);
         uaMapService.setUAMap(appointmentNo, u.getUserNo());
+
         return ResponseEntity.ok("success");
     }
 
@@ -55,7 +70,9 @@ public class AppointmentController {
         }else throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         //4. no 해당하는 약속정보 가져와서 return
         Appointment a = appointmentService.getAppointment(no);
-        AppointmentRe appointment = new AppointmentRe(a.getAppointmentNo(), a.getName(), a.getPlaceName(), a.getLatitude(), a.getLongitude());
+        AppointmentRe appointment =
+                new AppointmentRe(a.getAppointmentNo(), a.getName(), a.getPlaceName(),
+                        a.getLatitude(), a.getLongitude(), a.getTime());
 
         return appointment;
     }
@@ -72,8 +89,9 @@ public class AppointmentController {
         for (Iterator<Appointment> iter = appointments.iterator(); iter.hasNext();) {
             Appointment temp = iter.next();
 
-            AppointmentRe appointmentRe = new AppointmentRe(temp.getAppointmentNo(),
-                    temp.getName(), temp.getPlaceName(), temp.getLatitude(), temp.getLongitude());
+            AppointmentRe appointmentRe =
+                    new AppointmentRe(temp.getAppointmentNo(), temp.getName(),
+                            temp.getPlaceName(), temp.getLatitude(), temp.getLongitude(), temp.getTime());
             listResponse.add(appointmentRe);
         }
 
@@ -84,17 +102,23 @@ public class AppointmentController {
     }
 
     // appointment ID에 해당되는 약속
-    // 구현 예정
     @RequestMapping(value = "/getAppointment", method=RequestMethod.GET)
-    public  ResponseEntity<Appointment> getAppointmentById(@RequestParam Long no) {
+    public  ResponseEntity<Appointment> getAppointmentById(@RequestParam Long no) throws Exception {
         return ResponseEntity.ok(appointmentService.getAppointment(no));
     }
 
     // 약속 삭제
     @RequestMapping(value="/{no}", method=RequestMethod.DELETE)
-    public ResponseEntity<String> deleteAppointment(@PathVariable("no") Long no) {
+    public ResponseEntity<String> deleteAppointment(@PathVariable("no") Long no) throws Exception {
+        appointmentService.deleteAppointment(no);
 
-        if (appointmentService.deleteAppointment(no) > 0) return ResponseEntity.ok("Success");
-        else return ResponseEntity.ok("Fail");
+        return ResponseEntity.ok("Success");
+    }
+
+    @RequestMapping(value = "/setTime", method=RequestMethod.GET)
+    public  ResponseEntity<String> setAppointmentTime(@RequestParam Long no, @RequestBody String time) throws Exception {
+        appointmentService.updateAppointmentTime(no, time);
+        
+        return ResponseEntity.ok("Success");
     }
 }

@@ -8,14 +8,21 @@ import com.escape.way.model.User;
 import com.escape.way.service.UAMapService;
 import com.escape.way.service.UserService;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import com.escape.way.vo.UserPlace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -33,6 +40,9 @@ public class UserController {
   UserService userService;
   @Autowired
   UAMapService uaMapService;
+
+  @Value("${time.timezone}")
+  String timezone = "Asia/Seoul";
 
   //가입
   @RequestMapping(value = "/join", method = RequestMethod.POST)
@@ -53,6 +63,13 @@ public class UserController {
 
     user.setAuth("ROLE_USER");
     user.setKakaoId(1L);
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+    String curTime = ZonedDateTime.now(ZoneId.of(timezone)).format(formatter);
+
+    System.out.println(curTime);
+    user.setUpdateTime(curTime);
+    System.out.println(user.getUpdateTime());
 
     userService.joinUser(user);
     return ResponseEntity.ok("Success");
@@ -77,5 +94,13 @@ public class UserController {
   public ResponseEntity<String> deleteUser(@PathVariable("id") String id) {
     if (userService.deleteUser(id) > 0) return ResponseEntity.ok("Success");
     else return ResponseEntity.ok("Fail");
+  }
+
+  // 중복 확인
+  @RequestMapping(value = "/getTime", method = RequestMethod.GET)
+  @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
+  public ResponseEntity<String> getUpdateTime(@RequestParam String userId) throws Exception {
+    Long no = userService.getUserById(userId).getUserNo();
+    return ResponseEntity.ok(userService.getUpdateTime(no));
   }
 }

@@ -16,10 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -59,21 +57,31 @@ public class AppointmentService {
         return appointmentNo;
     }
 
-    public int updateAppointment(Long id, Appointment appointment){
-        Optional<Appointment> oAp = appointmentRepository.findById(id);
-        if(oAp.isPresent()) {
-            appointmentRepository.save(oAp.get());
-            return 1;
-        }
-        return 0;
+    public void updateAppointment(Long no, Appointment updateAppointment) throws Exception {
+        Appointment appointment = getAppointment(no);
+
+        if(appointment != null)
+            appointmentRepository.save(updateAppointment);
     }
-    public int deleteAppointment(Long id) {
-        Optional<Appointment> oAp = appointmentRepository.findById(id);
-        if (oAp.isPresent()) {
-            appointmentRepository.delete(oAp.get());
-            return 1;
-        }
-        return 0;
+
+    public void deleteAppointment(Long no) throws Exception {
+        Appointment appointment = getAppointment(no);
+
+        if(appointment != null)
+            appointmentRepository.deleteById(no);
+    }
+
+    public void updateAppointmentTime(Long no, String date) throws Exception {
+        Appointment appointment = getAppointment(no);
+        if(appointment != null)
+            appointmentRepository.setTime(no, date);
+    }
+
+    public void setUpdateTime(Long no, String date) throws Exception {
+        Appointment appointment = getAppointment(no);
+
+        if(appointment != null)
+            appointmentRepository.setUpdateTime(no, date);
     }
 
     public List<Appointment> getAppointmentList(){

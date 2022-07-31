@@ -1,6 +1,8 @@
 package com.escape.way.service;
 
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,14 +12,10 @@ import com.escape.way.error.ErrorCode;
 import com.escape.way.model.User;
 import com.escape.way.repository.UserRepository;
 import com.escape.way.vo.UserPlace;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import static com.escape.way.error.ErrorCode.MEMBER_NOT_FOUND;
 
@@ -56,6 +54,11 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
+    public User getUserByUserNo(Long no){
+        return userRepository.findById(no)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+    }
+
     public void updateUser(String id, double latitude, double longitude){
         User u = getUserById(id);
         u.setLatitude(latitude);
@@ -79,9 +82,28 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> findByIdPw(String id) { return userRepository.findByUserId(id); }
 
-    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public UserPlace getUserPlace(Long userNo) {
         return userRepository.findPlaceById(userNo)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+    }
+
+    public void setUpdateTime(Long no, String date) throws Exception {
+        User user = getUserByUserNo(no);
+
+        if(user != null)
+            userRepository.setUpdateTime(no, date);
+    }
+
+    public String getUpdateTime(Long no) throws Exception {
+        User user = getUserByUserNo(no);
+
+        if(user != null) {
+            String res = userRepository.getUpdateTime(no).orElseThrow(
+                    () -> new CustomException(MEMBER_NOT_FOUND));
+
+            return res;
+        }
+
+        throw new CustomException(MEMBER_NOT_FOUND);
     }
 }

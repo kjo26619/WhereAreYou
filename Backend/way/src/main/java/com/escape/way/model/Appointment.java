@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -28,6 +29,12 @@ public class Appointment implements Serializable{
 
     @Column(precision = 17, scale = 14)
     private double longitude;
+
+    @Column
+    private String time;
+
+    @Column
+    private String updateTime;
 
     @OneToMany(mappedBy = "appointment",  fetch = FetchType.LAZY)
     private List<UAMap> uamaps = new ArrayList<UAMap>();

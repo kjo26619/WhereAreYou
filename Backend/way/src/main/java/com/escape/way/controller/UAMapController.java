@@ -28,7 +28,8 @@ public class UAMapController {
     @ResponseBody
     @RequestMapping(value = "/{appointmentNo}", method=RequestMethod.GET)
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
-    public List<UserPlace> updateUserPlace(@PathVariable("appointmentNo") String appointmentNo, @RequestParam String latitude, @RequestParam String longitude, @RequestParam String userId)
+    public List<UserPlace> updateUserPlace(@PathVariable("appointmentNo") String appointmentNo,
+                                           @RequestParam String latitude, @RequestParam String longitude, @RequestParam String userId)
     throws RuntimeException{
 
         double uLatitude = Double.parseDouble(latitude);

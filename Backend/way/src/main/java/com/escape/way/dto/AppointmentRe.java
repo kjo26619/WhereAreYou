@@ -1,18 +1,24 @@
 package com.escape.way.dto;
 
+import java.util.Date;
+
 public class AppointmentRe {
     private Long appointmentNo;
     private String name;
     private String placeName;
     private double latitude;
     private double longitude;
+    private String time;
 
-    public AppointmentRe(Long appointmentNo, String name, String placeName, double latitude, double longitude) {
+    public AppointmentRe(Long appointmentNo, String name, String placeName,
+                         double latitude, double longitude, String time) {
         this.appointmentNo = appointmentNo;
         this.name = name;
         this.placeName = placeName;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.time = time;
+
     }
 
     public Long getAppointmentNo() {
@@ -46,4 +52,8 @@ public class AppointmentRe {
     public double getLongitude() { return this.longitude; }
 
     public void setLongitude(double longitude) { this.longitude = longitude; }
+
+    public String getTime() { return this.time; }
+
+    public void setTime(String time) { this.time = time; }
 }
