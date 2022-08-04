@@ -1,10 +1,17 @@
 import React, { useEffect } from 'react';
+import { PropTypes } from 'prop-types';
 import Map from './Map';
 
 const kakao = window.kakao;
 
-function SearchPlace (){
-    
+SearchPlace.propTypes = {
+    onPost: PropTypes.func
+};
+SearchPlace.defaultProps = {
+    onPost: (place) => { console.error('return function not defined'); }
+};
+
+function SearchPlace ({onPost}){
     function change(){
 
     }
@@ -113,7 +120,14 @@ function SearchPlace (){
                     infowindow.close();
                 };
                 itemEl.onclick = function (){
-                    console.log(marker);
+                    console.log('placeName: ', place.place_name);
+                    console.log('placeX: ', place.x, 'placeY: ', place.y);
+                    let placeData = {
+                        "placeName": place.place_name,
+                        "placeX": place.x,
+                        "placeY": place.y
+                    };
+                    onPost(placeData);
                 };
             })(marker, place);
 
