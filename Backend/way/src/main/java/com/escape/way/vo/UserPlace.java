@@ -2,13 +2,13 @@ package com.escape.way.vo;
 
 public  class UserPlace{
     private String userId;
-    private float userX;
-    private float userY;
+    private double latitude;
+    private double longitude;
 
-    public UserPlace(String id, float x, float y) {
+    public UserPlace(String id, double latitude, double longitude) {
         this.userId = id;
-        this.userX = x;
-        this.userY = y;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getUserId() {
@@ -19,19 +19,24 @@ public  class UserPlace{
         this.userId = userId;
     }
 
-    public float getUserX() {
-        return userX;
+    public double getLatitude() {
+        return this.latitude;
     }
 
-    public void setUserX(float userX) {
-        this.userX = userX;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public float getUserY() {
-        return userY;
+    public double getLongitude() {
+        return this.longitude;
     }
 
-    public void setUserY(float userY) {
-        this.userY = userY;
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
+
+    @Override
+    public String toString() {
+        return "userId : " + this.userId + " | latitude : " + this.latitude + " | longitude : " + this.longitude;
     }
 }

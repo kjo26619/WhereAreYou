@@ -21,8 +21,7 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "C005","Refresh Token이 만료되었거나 잘못된 값입니다"),
 
     DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "C006","중복된 데이터 값입니다"),
-    INVALID_APPOINTMENT_NO(HttpStatus.NOT_FOUND, "C007", "잘못된 약속 정보입니다")
-    ;
+    INVALID_APPOINTMENT_NO(HttpStatus.NOT_FOUND, "C007", "잘못된 약속 정보입니다");
 
     private HttpStatus httpStatus;
     private String code;

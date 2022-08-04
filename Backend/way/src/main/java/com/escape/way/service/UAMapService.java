@@ -1,5 +1,6 @@
 package com.escape.way.service;
 
+import com.escape.way.config.logging.LogEntry;
 import com.escape.way.error.CustomException;
 import com.escape.way.error.ErrorCode;
 import com.escape.way.model.Appointment;
@@ -11,6 +12,7 @@ import com.escape.way.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,15 @@ public class UAMapService {
         // Appointment No -> User ID
 
         return uaMapRepository.findAllByAppointmentId(appointmentNo);
+    }
 
+    public boolean existUAMap(Long appointmentNo, Long userNo) {
+        Long res = uaMapRepository.existsUAMap(appointmentNo , userNo);
+        if(res == null) return true;
+        else return false;
+    }
+
+    public List<Long> getAppointmentNoListByUserNo(Long no) {
+        return uaMapRepository.findAppointmentListByUserNo(no);
     }
 }

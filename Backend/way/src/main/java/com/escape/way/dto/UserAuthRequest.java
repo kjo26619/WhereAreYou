@@ -13,4 +13,9 @@ public class UserAuthRequest {
         this.userId = userId;
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "userId : " + this.userId + " | password : " + this.password;
+    }
 }

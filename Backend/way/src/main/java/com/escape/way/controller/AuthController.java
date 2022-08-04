@@ -2,6 +2,7 @@ package com.escape.way.controller;
 
 import com.escape.way.config.RedisUtil;
 import com.escape.way.config.TokenUtil;
+import com.escape.way.config.logging.LogEntry;
 import com.escape.way.dto.TokenResponse;
 import com.escape.way.dto.UserAuthRequest;
 import com.escape.way.error.CustomException;
@@ -17,14 +18,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 
+@RequestMapping("/api/auth/*")
 @Controller
 public class AuthController {
     @Autowired
@@ -39,7 +40,8 @@ public class AuthController {
     @Autowired
     private RedisUtil redisUtil;
 
-    @RequestMapping(value = "/api/auth", method= RequestMethod.POST)
+    @RequestMapping(value = "/login", method= RequestMethod.POST)
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public ResponseEntity<?> createAuthenticationToken(UserAuthRequest userInfo) throws RuntimeException {
         String userId = userInfo.getUserId();
         String password = userInfo.getPassword();
@@ -61,27 +63,32 @@ public class AuthController {
         return ResponseEntity.ok(new TokenResponse(user.getUserId(), accessToken, refreshToken));
     }
 
-    @RequestMapping(value = "/api/reAuth", method= RequestMethod.POST)
-    public ResponseEntity<?> createRefreshToAccessToken(@RequestParam String RefreshToken) throws RuntimeException {
-
+    @ResponseBody
+    @RequestMapping(value = "/reAuth", method= RequestMethod.POST)
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
+    public ResponseEntity<?> createRefreshToAccessToken(@RequestBody HashMap<String, String> RefreshToken) throws RuntimeException {
+        String refreshToken = RefreshToken.get("RefreshToken");
         String userId = null;
 
-        userId = redisUtil.getData(RefreshToken);
+        try {
+            userId = redisUtil.getData(refreshToken);
 
-        if (userId == null) {
+            if (userId.equals(tokenUtil.getUsernameFromToken(refreshToken))) {
+                User user = userService.loadUserByUsername(userId);
+
+                String returnAccessToken = tokenUtil.generateAccessToken(user);
+
+                return ResponseEntity.ok(new TokenResponse(user.getUserId(), returnAccessToken, "None"));
+            }
+            else {
+                throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+            }
+        }
+        catch (Exception e) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
-        if (userId.equals(tokenUtil.getUsernameFromToken(RefreshToken))) {
-            User user = userService.loadUserByUsername(userId);
 
-            String returnAccessToken = tokenUtil.generateAccessToken(user);
-
-            return ResponseEntity.ok(new TokenResponse(user.getUserId(), returnAccessToken, "None"));
-        }
-        else {
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
-        }
     }
 
     private void authenticate(String username, String password) throws Exception {

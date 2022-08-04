@@ -17,4 +17,8 @@ public class UserRegisterRequest {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "userId : " + this.userId + " | password : " + this.password + " | name : " + this.name;
+    }
 }
