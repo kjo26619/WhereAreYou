@@ -31,16 +31,9 @@ public class AppointmentController {
     UserService userService;
 
     //약속 생성
-<<<<<<< HEAD
     @PostMapping(value = "/create")
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public @ResponseBody ResponseEntity<String> createAppointment(@RequestParam String userId, @RequestBody Appointment appointment) throws Exception {
-=======
-    @PostMapping(value = "/api/appointment")
-    public @ResponseBody ResponseEntity<String> createAppointment(@RequestParam String userId, @RequestBody Appointment appointment) {
-        System.out.println(userId + " , " + appointment.getPlaceName());
-        
->>>>>>> fe012f3acd18eced0424198249dad87395172d5d
         Long appointmentNo = appointmentService.createAppointment(appointment);
         User u = userService.getUserById(userId);
         uaMapService.setUAMap(appointmentNo, u.getUserNo());

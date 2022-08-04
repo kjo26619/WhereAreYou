@@ -1,11 +1,12 @@
 import axios from 'axios';
+import API from '../axios/Api'
 import * as types from './ActionTypes';
 
-const baseURL = "http://ec2-54-180-143-120.ap-northeast-2.compute.amazonaws.com/api";
+const BASE_URL = API.BASE_URL;
 
 /* LOGIN */
 export function loginRequest(userId, password) {
-    const url = baseURL + '/auth';
+    const url = BASE_URL + '/auth';
     console.log('[login request] url :', url, 'id : ', userId, 'pw : ', password);
     const userData = {
         userId: userId,
@@ -49,7 +50,7 @@ export function loginFailure() {
 
 /* REGISTER */
 export function registerRequest(userData) {
-    const url = baseURL + '/join';
+    const url = BASE_URL + '/join';
     console.log('[register request] url :', url, 'name :', userData.name, 'id : ', userData.id, 'pw : ', userData.pw);
     const mUserData = {
         userId : userData.id,
@@ -94,7 +95,7 @@ export function getStatusRequest() {
         // inform Get Status API is starting
         dispatch(getStatus());
 
-        const url = baseURL + '/user'
+        const url = BASE_URL + '/user'
         return axios.get(url)
             .then((response) => {
                 dispatch(getStatusSuccess(response.data.info.username));
@@ -126,7 +127,7 @@ export function getStatusFailure() {
 
 /* Logout */
 export function logoutRequest(username, refreshToken) {
-    const url = baseURL + '/logout';
+    const url = BASE_URL + '/logout';
     console.log('[logout request] url :', url, 'name :', username, 'refreshToken : ', refreshToken);
     return (dispatch) => {
         return axios.post(url, { refreshToken }, { Credential: true })
