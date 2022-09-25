@@ -24,10 +24,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @RequestMapping(value = "/api/appointment/*")
 @Controller
@@ -165,12 +162,12 @@ public class AppointmentController {
         return ResponseEntity.ok("Success");
     }
 
-    @RequestMapping(value = "/setTime", method=RequestMethod.GET)
-    public  ResponseEntity<String> setAppointmentTime(@RequestParam Long no, @RequestBody String time) throws Exception {
+    @RequestMapping(value = "/setTime/{no}", method=RequestMethod.PUT)
+    public  ResponseEntity<String> setAppointmentTime(@PathVariable("no") Long no, @RequestBody HashMap<String, String> time) throws Exception {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-            LocalDateTime localAppointmentTime = LocalDateTime.parse(time, formatter);
+            System.out.println(time.get("time"));
+            LocalDateTime localAppointmentTime = LocalDateTime.parse(time.get("time"), formatter);
             ZonedDateTime appointmentTime = localAppointmentTime.atZone(ZoneId.of("UTC"));
             System.out.println(appointmentTime);
 

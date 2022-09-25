@@ -13,10 +13,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import com.escape.way.vo.UserPlace;
 import lombok.RequiredArgsConstructor;
@@ -111,16 +108,17 @@ public class UserController {
   }
 
   // 유저의 업데이트 시간 갱신
-  @RequestMapping(value = "/setTime", method=RequestMethod.GET)
-  public  ResponseEntity<String> setAppointmentTime(@RequestParam Long no, @RequestBody String time) throws Exception {
+  @RequestMapping(value = "/setTime/{id}", method=RequestMethod.PUT)
+  public  ResponseEntity<String> setUserUpdateTime(@PathVariable("id") String userId, @RequestBody HashMap<String, String> time) throws Exception {
     try {
+      User user = userService.getUserById(userId);
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-      LocalDateTime localAppointmentTime = LocalDateTime.parse(time, formatter);
+      LocalDateTime localAppointmentTime = LocalDateTime.parse(time.get("time"), formatter);
       ZonedDateTime updateTime = localAppointmentTime.atZone(ZoneId.of("UTC"));
       System.out.println(updateTime);
 
-      userService.setUpdateTime(no, updateTime);
+      userService.setUpdateTime(user.getUserNo(), updateTime);
 
       return ResponseEntity.ok("Success");
     }

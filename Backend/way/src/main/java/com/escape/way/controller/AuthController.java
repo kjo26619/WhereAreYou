@@ -44,7 +44,7 @@ public class AuthController {
 
     @RequestMapping(value = "/login", method= RequestMethod.POST)
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
-    public ResponseEntity<?> createAuthenticationToken(UserAuthRequest userInfo) throws RuntimeException {
+    public ResponseEntity<?> createAuthenticationToken(UserAuthRequest userInfo) throws Exception {
         String userId = userInfo.getUserId();
         String password = userInfo.getPassword();
 
@@ -62,7 +62,7 @@ public class AuthController {
 
         redisUtil.setDataExpire(refreshToken, user.getUserId(), tokenUtil.REFRESH_TOKEN_VALIDATION);
 
-        user.setUpdateTime(ZonedDateTime.now(ZoneId.of("UTC")));
+        userService.setUpdateTime(user.getUserNo(), ZonedDateTime.now(ZoneId.of("UTC")));
 
         return ResponseEntity.ok(new TokenResponse(user.getUserId(), accessToken, refreshToken));
     }

@@ -5,8 +5,10 @@ import com.escape.way.vo.UserPlace;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.keyvalue.repository.config.QueryCreatorType;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -24,6 +26,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
     @Query("SELECT u.updateTime FROM User u WHERE u.userNo = :user_no")
     Optional<ZonedDateTime> getUpdateTime(@Param("user_no") Long userNo);
 
+    @Transactional
     @Modifying
     @Query("update User u set u.updateTime = :time where u.userNo = :user_no ")
     int setUpdateTime(@Param("user_no") Long no, @Param("time") ZonedDateTime time);
