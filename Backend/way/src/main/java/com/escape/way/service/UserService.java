@@ -1,6 +1,7 @@
 package com.escape.way.service;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
@@ -87,7 +88,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
-    public void setUpdateTime(Long no, String date) throws Exception {
+    public void setUpdateTime(Long no, ZonedDateTime date) throws Exception {
         User user = getUserByUserNo(no);
 
         if(user != null)
@@ -98,10 +99,13 @@ public class UserService implements UserDetailsService {
         User user = getUserByUserNo(no);
 
         if(user != null) {
-            String res = userRepository.getUpdateTime(no).orElseThrow(
+            ZonedDateTime res = userRepository.getUpdateTime(no).orElseThrow(
                     () -> new CustomException(MEMBER_NOT_FOUND));
 
-            return res;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String appointmentTime = res.format(formatter);
+
+            return appointmentTime;
         }
 
         throw new CustomException(MEMBER_NOT_FOUND);

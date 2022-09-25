@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,10 +32,10 @@ public class Appointment implements Serializable{
     private double longitude;
 
     @Column
-    private String time;
+    private ZonedDateTime time;
 
     @Column
-    private String updateTime;
+    private ZonedDateTime updateTime;
 
     @OneToMany(mappedBy = "appointment",  fetch = FetchType.LAZY)
     private List<UAMap> uamaps = new ArrayList<UAMap>();

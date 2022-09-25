@@ -46,4 +46,6 @@ public class UAMapService {
     public List<Long> getAppointmentNoListByUserNo(Long no) {
         return uaMapRepository.findAppointmentListByUserNo(no);
     }
+
+    public List<Long> findUserListByAppointmentNo(Long no) { return uaMapRepository.findUserListByAppointmentNo(no);   }
 }

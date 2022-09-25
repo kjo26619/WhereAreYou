@@ -21,4 +21,7 @@ public interface UAMapRepository extends JpaRepository<UAMap, Long> {
 
     @Query("SELECT u.appointment.appointmentNo FROM UAMap u WHERE u.user.userNo = :user_no")
     List<Long> findAppointmentListByUserNo(@Param("user_no") Long userNo);
+
+    @Query("SELECT u.user.userNo FROM UAMap u WHERE u.appointment.appointmentNo = :appointment_no")
+    List<Long> findUserListByAppointmentNo(@Param("appointment_no") Long appointmentNo);
 }

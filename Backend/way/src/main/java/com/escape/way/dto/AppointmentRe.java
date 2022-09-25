@@ -1,5 +1,6 @@
 package com.escape.way.dto;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class AppointmentRe {

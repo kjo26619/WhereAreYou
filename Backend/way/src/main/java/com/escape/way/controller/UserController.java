@@ -41,13 +41,22 @@ public class UserController {
   @Autowired
   UAMapService uaMapService;
 
-  @Value("${time.timezone}")
-  String timezone = "Asia/Seoul";
-
   //가입
   @RequestMapping(value = "/join", method = RequestMethod.POST)
   @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
   public ResponseEntity<String> join(UserRegisterRequest userInfo) throws RuntimeException{
+
+    if (userInfo.getName() == null || userInfo.getName().isEmpty()) {
+      throw new CustomException(ErrorCode.EMPTY_USER_NAME);
+    }
+
+    if (userInfo.getPassword() == null || userInfo.getPassword().isEmpty()) {
+      throw new CustomException(ErrorCode.EMPTY_PASSWORD);
+    }
+
+    if (userInfo.getUserId() == null || userInfo.getUserId().isEmpty()) {
+      throw new CustomException(ErrorCode.EMPTY_USER_ID);
+    }
 
     if (userService.checkIdDuplicate(userInfo.getUserId())) {
       throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
@@ -64,12 +73,9 @@ public class UserController {
     user.setAuth("ROLE_USER");
     user.setKakaoId(1L);
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-    String curTime = ZonedDateTime.now(ZoneId.of(timezone)).format(formatter);
+    ZonedDateTime curTime = ZonedDateTime.now();
 
-    System.out.println(curTime);
     user.setUpdateTime(curTime);
-    System.out.println(user.getUpdateTime());
 
     userService.joinUser(user);
     return ResponseEntity.ok("Success");
@@ -96,11 +102,30 @@ public class UserController {
     else return ResponseEntity.ok("Fail");
   }
 
-  // 중복 확인
+  // 유저의 최근 업데이트 시간
   @RequestMapping(value = "/getTime", method = RequestMethod.GET)
   @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
   public ResponseEntity<String> getUpdateTime(@RequestParam String userId) throws Exception {
     Long no = userService.getUserById(userId).getUserNo();
     return ResponseEntity.ok(userService.getUpdateTime(no));
+  }
+
+  // 유저의 업데이트 시간 갱신
+  @RequestMapping(value = "/setTime", method=RequestMethod.GET)
+  public  ResponseEntity<String> setAppointmentTime(@RequestParam Long no, @RequestBody String time) throws Exception {
+    try {
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+      LocalDateTime localAppointmentTime = LocalDateTime.parse(time, formatter);
+      ZonedDateTime updateTime = localAppointmentTime.atZone(ZoneId.of("UTC"));
+      System.out.println(updateTime);
+
+      userService.setUpdateTime(no, updateTime);
+
+      return ResponseEntity.ok("Success");
+    }
+    catch(Exception e) {
+      throw new CustomException(ErrorCode.INVALID_APPOINTMENT_TIME);
+    }
   }
 }

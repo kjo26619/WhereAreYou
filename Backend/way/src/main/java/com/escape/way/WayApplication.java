@@ -11,7 +11,7 @@ import java.util.TimeZone;
 public class WayApplication {
 	@PostConstruct
 	public void started() {
-		TimeZone.setDefault(TimeZone.getTimeZone("KST"));
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(WayApplication.class, args);

@@ -4,6 +4,7 @@ import com.escape.way.dto.AppointmentRe;
 import com.escape.way.error.CustomException;
 import com.escape.way.error.ErrorCode;
 import com.escape.way.model.Appointment;
+import com.escape.way.model.UAMap;
 import com.escape.way.model.User;
 import com.escape.way.repository.AppointmentRepository;
 import com.escape.way.repository.UAMapRepository;
@@ -53,7 +54,7 @@ public class AppointmentService {
     public Long createAppointment(Appointment appointment){
         Appointment ap = appointmentRepository.save(appointment);
         Long appointmentNo = ap.getAppointmentNo();
-        System.out.println(appointmentNo);
+
         return appointmentNo;
     }
 
@@ -71,20 +72,32 @@ public class AppointmentService {
             appointmentRepository.deleteById(no);
     }
 
-    public void updateAppointmentTime(Long no, String date) throws Exception {
+    public void updateAppointmentTime(Long no, ZonedDateTime date) throws Exception {
         Appointment appointment = getAppointment(no);
+
         if(appointment != null)
             appointmentRepository.setTime(no, date);
     }
 
-    public void setUpdateTime(Long no, String date) throws Exception {
+    public void setUpdateTime(Long no, ZonedDateTime date) throws Exception {
         Appointment appointment = getAppointment(no);
 
         if(appointment != null)
             appointmentRepository.setUpdateTime(no, date);
     }
 
-    public List<Appointment> getAppointmentList(){
-        return appointmentRepository.findAll();
+    public List<User> getAppointmentUserList(Long no) throws Exception {
+        List<User> userList = new ArrayList<>();
+        List<Long> userNoList = uaMapService.findUserListByAppointmentNo(no);
+
+        for (Iterator<Long> iter = userNoList.iterator(); iter.hasNext();) {
+            Long curNo = iter.next();
+
+            User u =userService.getUserByUserNo(curNo);
+
+            userList.add(u);
+        }
+
+        return userList;
     }
 }

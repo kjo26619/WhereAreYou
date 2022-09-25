@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 
@@ -59,6 +61,8 @@ public class AuthController {
         final String refreshToken = tokenUtil.generateRefreshToken(user);
 
         redisUtil.setDataExpire(refreshToken, user.getUserId(), tokenUtil.REFRESH_TOKEN_VALIDATION);
+
+        user.setUpdateTime(ZonedDateTime.now(ZoneId.of("UTC")));
 
         return ResponseEntity.ok(new TokenResponse(user.getUserId(), accessToken, refreshToken));
     }

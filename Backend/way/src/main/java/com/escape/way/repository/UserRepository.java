@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 @Repository
@@ -21,11 +22,11 @@ public interface UserRepository extends JpaRepository<User, Long>{
     Optional<UserPlace> findPlaceById(@Param("user_no") Long userNo);
 
     @Query("SELECT u.updateTime FROM User u WHERE u.userNo = :user_no")
-    Optional<String> getUpdateTime(@Param("user_no") Long userNo);
+    Optional<ZonedDateTime> getUpdateTime(@Param("user_no") Long userNo);
 
     @Modifying
     @Query("update User u set u.updateTime = :time where u.userNo = :user_no ")
-    int setUpdateTime(@Param("user_no") Long no, @Param("time") String time);
+    int setUpdateTime(@Param("user_no") Long no, @Param("time") ZonedDateTime time);
 
 
 }

@@ -42,7 +42,7 @@ public class User implements Serializable, UserDetails {
     private String userId;
 
     @Column
-    private String updateTime;
+    private ZonedDateTime updateTime;
 
     @OneToMany(mappedBy = "user")
     private List<UAMap> uamaps = new ArrayList<UAMap>();
@@ -61,6 +61,9 @@ public class User implements Serializable, UserDetails {
         this.kakaoId = kakaoId;
     }
 
+    public ZonedDateTime getUpdateTime() { return this.updateTime; }
+
+    public void setUpdateTime(ZonedDateTime updateTime) { this.updateTime = updateTime; }
     @Override
     public String toString() {
         return this.name + ", " + this.pw + ", " + this.userId + ", " + this.latitude + ", " + this.longitude + ", " + this.kakaoId;
