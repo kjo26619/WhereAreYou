@@ -2,11 +2,8 @@ package com.escape.way.filter;
 
 import com.escape.way.config.RedisUtil;
 import com.escape.way.config.TokenUtil;
-import com.escape.way.error.CustomException;
-import com.escape.way.error.ErrorCode;
 import com.escape.way.model.User;
 import com.escape.way.service.UserService;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

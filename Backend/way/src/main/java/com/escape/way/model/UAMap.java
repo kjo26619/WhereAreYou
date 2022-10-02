@@ -1,7 +1,5 @@
 package com.escape.way.model;
 
-import com.escape.way.model.Appointment;
-import com.escape.way.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,6 +33,12 @@ public class UAMap implements Serializable{
     public UAMap(User user, Appointment appointment) {
         this.user = user;
         this.appointment = appointment;
+    }
+
+    public UAMap(User user, Appointment appointment, boolean owner) {
+        this.user = user;
+        this.appointment = appointment;
+        this.owner = owner;
     }
 
 }

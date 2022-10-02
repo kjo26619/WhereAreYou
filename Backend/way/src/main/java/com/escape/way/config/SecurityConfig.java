@@ -17,14 +17,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
 import java.util.Arrays;
-import java.util.Collections;
 
 
 @Slf4j
@@ -53,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
 //                .and()
-//                .authorizeRequests().antMatchers("/api/auth", "/api/join", "/api/reAuth").permitAll()
+//                .authorizeRequests().antMatchers("/api/user/login", "/api/user/join", "/api/user/reAuth").permitAll()
 //                .anyRequest().authenticated()
 
                 .and()

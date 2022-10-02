@@ -1,22 +1,13 @@
 package com.escape.way.service;
 
-import com.escape.way.dto.AppointmentRe;
 import com.escape.way.error.CustomException;
 import com.escape.way.error.ErrorCode;
 import com.escape.way.model.Appointment;
-import com.escape.way.model.UAMap;
 import com.escape.way.model.User;
 import com.escape.way.repository.AppointmentRepository;
-import com.escape.way.repository.UAMapRepository;
-import com.escape.way.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import javax.swing.text.html.Option;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -65,11 +56,16 @@ public class AppointmentService {
             appointmentRepository.save(updateAppointment);
     }
 
-    public void deleteAppointment(Long no) throws Exception {
+    public boolean deleteAppointment(Long no) throws Exception {
         Appointment appointment = getAppointment(no);
 
-        if(appointment != null)
+        if(appointment != null) {
             appointmentRepository.deleteById(no);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public void updateAppointmentTime(Long no, ZonedDateTime date) throws Exception {

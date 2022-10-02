@@ -1,10 +1,7 @@
 package com.escape.way.dto;
 
-import com.escape.way.vo.UserPlace;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -21,5 +18,11 @@ public class AppointmentUserListResponse {
         this.latitude = latitude;
         this.longitude = longitude;
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "name : " + this.name + " | userId : " + this.userId + " | latitude : " + this.latitude +
+                " | longitude : " + this.longitude + " | updateTime : " + this.updateTime;
     }
 }

@@ -1,20 +1,20 @@
 package com.escape.way.controller;
 
+import com.escape.way.config.DateTimeUtil;
 import com.escape.way.config.logging.LogEntry;
-import com.escape.way.dto.AppointmentRe;
+import com.escape.way.dto.AppointmentResponse;
 import com.escape.way.dto.AppointmentUserListResponse;
 import com.escape.way.dto.CreateAppointmentRequest;
+import com.escape.way.dto.UpdateTimeRequest;
 import com.escape.way.error.CustomException;
 import com.escape.way.error.ErrorCode;
 import com.escape.way.model.Appointment;
-import com.escape.way.model.UAMap;
 import com.escape.way.model.User;
 import com.escape.way.service.AppointmentService;
 import com.escape.way.service.UAMapService;
 import com.escape.way.service.UserService;
+import com.escape.way.vo.UserPlace;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +36,16 @@ public class AppointmentController {
     UAMapService uaMapService;
     @Autowired
     UserService userService;
+    @Autowired
+    DateTimeUtil dateTimeUtil;
 
     //약속 생성
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/")
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public @ResponseBody ResponseEntity<String> createAppointment(
-            @RequestParam String userId, @RequestBody CreateAppointmentRequest body) throws Exception {
+            @RequestBody CreateAppointmentRequest body) throws Exception {
         Appointment appointment = new Appointment();
-        User u = userService.getUserById(userId);
+        User u = userService.getUserById(body.getUserId());
 
         if (body.getName() == null || body.getName().isEmpty()) {
             throw new CustomException(ErrorCode.EMPTY_APPOINTMENT_NAME);
@@ -58,7 +60,6 @@ public class AppointmentController {
         }
 
         ZonedDateTime curTime = ZonedDateTime.now(ZoneId.of("UTC"));
-        System.out.println(curTime);
 
         appointment.setUpdateTime(curTime);
         appointment.setName(body.getName());
@@ -67,11 +68,8 @@ public class AppointmentController {
         appointment.setLongitude(body.getLongitude());
 
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            ZonedDateTime appointmentTime = dateTimeUtil.String2DateTime(body.getTime());
 
-            LocalDateTime localAppointmentTime = LocalDateTime.parse(body.getTime(), formatter);
-            ZonedDateTime appointmentTime = localAppointmentTime.atZone(ZoneId.of("UTC"));
-            System.out.println(appointmentTime);
             appointment.setTime(appointmentTime);
         }
         catch(Exception e) {
@@ -80,7 +78,7 @@ public class AppointmentController {
 
         Long appointmentNo = appointmentService.createAppointment(appointment);
 
-        uaMapService.setUAMap(appointmentNo, u.getUserNo());
+        uaMapService.setUAMap(appointmentNo, u.getUserNo(), true);
 
         return ResponseEntity.ok("success");
     }
@@ -88,7 +86,7 @@ public class AppointmentController {
     @ResponseBody
     @RequestMapping(value = "/addUser", method=RequestMethod.GET)
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
-    public AppointmentRe addUser(@RequestParam Long no, @RequestParam String userId) throws Exception {
+    public AppointmentResponse addUser(@RequestParam Long no, @RequestParam String userId) throws Exception {
         //1. user id로 user no 검색
         User u = userService.getUserById(userId);
 
@@ -96,7 +94,7 @@ public class AppointmentController {
         if (uaMapService.existUAMap(no, u.getUserNo())) {
 
             //3. uaMap에 insert
-            uaMapService.setUAMap(no, u.getUserNo());
+            uaMapService.setUAMap(no, u.getUserNo(), false);
         }else throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         //4. no 해당하는 약속정보 가져와서 return
         Appointment a = appointmentService.getAppointment(no);
@@ -104,31 +102,29 @@ public class AppointmentController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         String appointmentTime = a.getTime().format(formatter);
-        AppointmentRe appointment =
-                new AppointmentRe(a.getAppointmentNo(), a.getName(), a.getPlaceName(),
+        AppointmentResponse appointment =
+                new AppointmentResponse(a.getAppointmentNo(), a.getName(), a.getPlaceName(),
                         a.getLatitude(), a.getLongitude(), appointmentTime);
 
         return appointment;
     }
 
     // userid를 가진 약속 리스트
-    @RequestMapping(value = "/getList", method=RequestMethod.GET)
+    @RequestMapping(value = "/{userId}/lists", method=RequestMethod.GET)
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public @ResponseBody
-    ResponseEntity<List<AppointmentRe>> getAppointmentByUserId(@RequestParam String userId) throws Exception {
+    ResponseEntity<List<AppointmentResponse>> getAppointmentByUserId(@PathVariable("userId") String userId) throws Exception {
 
         List<Appointment> appointments = appointmentService.getAppointmentList(userId);
-        List<AppointmentRe> listResponse = new ArrayList<>();
+        List<AppointmentResponse> listResponse = new ArrayList<>();
 
         for (Iterator<Appointment> iter = appointments.iterator(); iter.hasNext();) {
             Appointment temp = iter.next();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String appointmentTime = dateTimeUtil.dateTime2String(temp.getTime());
 
-            String appointmentTime = temp.getTime().format(formatter);
-
-            AppointmentRe appointmentRe =
-                    new AppointmentRe(temp.getAppointmentNo(), temp.getName(),
+            AppointmentResponse appointmentRe =
+                    new AppointmentResponse(temp.getAppointmentNo(), temp.getName(),
                             temp.getPlaceName(), temp.getLatitude(), temp.getLongitude(), appointmentTime);
             listResponse.add(appointmentRe);
         }
@@ -140,36 +136,43 @@ public class AppointmentController {
     }
 
     // appointment ID에 해당되는 약속
-    @RequestMapping(value = "/getAppointment", method=RequestMethod.GET)
-    public  ResponseEntity<AppointmentRe> getAppointmentById(@RequestParam Long no) throws Exception {
+    @RequestMapping(value = "/{appointmentNo}", method=RequestMethod.GET)
+    public  ResponseEntity<AppointmentResponse> getAppointmentById(@PathVariable("appointmentNo") Long no) throws Exception {
         Appointment appointment = appointmentService.getAppointment(no);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String appointmentTime = dateTimeUtil.dateTime2String(appointment.getTime());
 
-        String appointmentTime = appointment.getTime().format(formatter);
-
-        AppointmentRe resp = new AppointmentRe(appointment.getAppointmentNo(), appointment.getName(),
+        AppointmentResponse resp = new AppointmentResponse(appointment.getAppointmentNo(), appointment.getName(),
                 appointment.getPlaceName(), appointment.getLatitude(), appointment.getLongitude(), appointmentTime);
 
         return ResponseEntity.ok(resp);
     }
 
     // 약속 삭제
-    @RequestMapping(value="/{no}", method=RequestMethod.DELETE)
-    public ResponseEntity<String> deleteAppointment(@PathVariable("no") Long no) throws Exception {
-        appointmentService.deleteAppointment(no);
+    @RequestMapping(value="/{appointmentNo}", method=RequestMethod.DELETE)
+    public ResponseEntity<String> deleteAppointment(@PathVariable("appointmentNo") Long no) throws Exception {
 
-        return ResponseEntity.ok("Success");
+        try {
+            int uaMapDeletedCnt = uaMapService.deleteUAMapByAppointmentNo(no);
+            boolean appointmentDeleted = appointmentService.deleteAppointment(no);
+
+            if (appointmentDeleted && uaMapDeletedCnt > 0) {
+                return ResponseEntity.ok("Success");
+            }
+            else {
+                return ResponseEntity.ok("Failed");
+            }
+        }
+        catch(Exception e) {
+            throw new CustomException(ErrorCode.INVALID_APPOINTMENT_NO);
+        }
     }
 
-    @RequestMapping(value = "/setTime/{no}", method=RequestMethod.PUT)
-    public  ResponseEntity<String> setAppointmentTime(@PathVariable("no") Long no, @RequestBody HashMap<String, String> time) throws Exception {
+    @RequestMapping(value = "/{appointmentNo}/times", method=RequestMethod.PUT)
+    public  ResponseEntity<String> setAppointmentTime(@PathVariable("appointmentNo") Long no, @RequestBody UpdateTimeRequest time) throws Exception {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            System.out.println(time.get("time"));
-            LocalDateTime localAppointmentTime = LocalDateTime.parse(time.get("time"), formatter);
-            ZonedDateTime appointmentTime = localAppointmentTime.atZone(ZoneId.of("UTC"));
-            System.out.println(appointmentTime);
+            ZonedDateTime appointmentTime = dateTimeUtil.String2DateTime(time.getTime());
+
 
             appointmentService.updateAppointmentTime(no, appointmentTime);
 
@@ -180,8 +183,8 @@ public class AppointmentController {
         }
     }
 
-    @RequestMapping(value = "/getUserList", method=RequestMethod.GET)
-    public ResponseEntity<List<AppointmentUserListResponse>> getUserList(@RequestParam Long no) throws Exception {
+    @RequestMapping(value = "/{appointmentNo}/user-lists", method=RequestMethod.GET)
+    public ResponseEntity<List<AppointmentUserListResponse>> getUserList(@PathVariable("appointmentNo") Long no) throws Exception {
         List<AppointmentUserListResponse> result = new ArrayList<>();
 
         List<User> appointmentUserList = appointmentService.getAppointmentUserList(no);
@@ -189,9 +192,7 @@ public class AppointmentController {
         for (Iterator<User> iter = appointmentUserList.iterator(); iter.hasNext();) {
             User tempUser= iter.next();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-            String userUpdateTime = tempUser.getUpdateTime().format(formatter);
+            String userUpdateTime = dateTimeUtil.dateTime2String(tempUser.getUpdateTime());
             AppointmentUserListResponse resp = new AppointmentUserListResponse(tempUser.getName(), tempUser.getUserId(),
                     tempUser.getLatitude(), tempUser.getLongitude(), userUpdateTime);
 
@@ -199,5 +200,44 @@ public class AppointmentController {
         }
 
         return ResponseEntity.ok(result);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/places", method=RequestMethod.GET)
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
+    public List<UserPlace> updateUserPlace(@RequestParam(required = false) Long appointmentNo,
+                                           @RequestParam String latitude, @RequestParam String longitude, @RequestParam String userId)
+            throws RuntimeException{
+
+        double uLatitude = Double.parseDouble(latitude);
+        double uLongitude = Double.parseDouble(longitude);
+        userService.updateUser(userId, uLatitude, uLongitude);
+
+        List<UserPlace> userPlaceList = new ArrayList<UserPlace>();
+
+        if(appointmentNo != null) {  // apNo 존재 --> 리스트
+            List<Long> userList = uaMapService.getUserNoList(appointmentNo);
+            if (userList.isEmpty()) { throw new CustomException(ErrorCode.INVALID_APPOINTMENT_NO); }
+
+            userPlaceList = getUserList2PlaceList(userList);
+        }
+        else { // apNo Null 일 때
+            UserPlace up = new UserPlace(userId, uLatitude, uLongitude);
+            userPlaceList.add(up);
+        }
+
+        return userPlaceList;
+    }
+
+    public List<UserPlace> getUserList2PlaceList(List<Long> userList) {
+        List<UserPlace> resList = new ArrayList<UserPlace>();
+
+        for(Iterator<Long> iter = userList.iterator();iter.hasNext();) {
+            UserPlace userPlace = userService.getUserPlace(iter.next());
+
+            resList.add(userPlace);
+        }
+
+        return resList;
     }
 }

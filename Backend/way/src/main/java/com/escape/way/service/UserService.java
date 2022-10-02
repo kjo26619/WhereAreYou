@@ -3,13 +3,11 @@ package com.escape.way.service;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import com.escape.way.config.logging.LogEntry;
 import com.escape.way.error.CustomException;
-import com.escape.way.error.ErrorCode;
 import com.escape.way.model.User;
 import com.escape.way.repository.UserRepository;
 import com.escape.way.vo.UserPlace;
