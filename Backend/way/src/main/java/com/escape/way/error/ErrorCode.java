@@ -27,7 +27,8 @@ public enum ErrorCode {
     INVALID_APPOINTMENT_TIME(HttpStatus.BAD_REQUEST, "C011", "잘못된 약속 시간입니다"),
     EMPTY_USER_NAME(HttpStatus.BAD_REQUEST, "C012", "유저 이름이 비어있습니다"),
     EMPTY_PASSWORD(HttpStatus.BAD_REQUEST, "C013", "패스워드가 비어있습니다"),
-    EMPTY_USER_ID(HttpStatus.BAD_REQUEST, "C014", "유저 ID가 비어있습니다")
+    EMPTY_USER_ID(HttpStatus.BAD_REQUEST, "C014", "유저 ID가 비어있습니다"),
+    INVALID_LINK(HttpStatus.BAD_REQUEST, "C015", "만료되거나 잘못된 invite Code입니다."),
     ;
 
     private HttpStatus httpStatus;

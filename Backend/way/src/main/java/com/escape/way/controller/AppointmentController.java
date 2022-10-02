@@ -1,6 +1,8 @@
 package com.escape.way.controller;
 
+import com.escape.way.config.CryptUtil;
 import com.escape.way.config.DateTimeUtil;
+import com.escape.way.config.RedisUtil;
 import com.escape.way.config.logging.LogEntry;
 import com.escape.way.dto.AppointmentResponse;
 import com.escape.way.dto.AppointmentUserListResponse;
@@ -19,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +39,8 @@ public class AppointmentController {
     UserService userService;
     @Autowired
     DateTimeUtil dateTimeUtil;
+    @Autowired
+    RedisUtil redisUtil;
 
     //약속 생성
     @PostMapping(value = "/")
@@ -83,10 +86,30 @@ public class AppointmentController {
         return ResponseEntity.ok("success");
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/addUser", method=RequestMethod.GET)
+    @RequestMapping(value = "/link", method=RequestMethod.GET)
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
-    public AppointmentResponse addUser(@RequestParam Long no, @RequestParam String userId) throws Exception {
+    public ResponseEntity<String> createLink(@RequestParam Long no, @RequestParam String userId) throws Exception {
+        String apNo = no.toString();
+        String curTime = dateTimeUtil.dateTime2String(ZonedDateTime.now(ZoneId.of("UTC")));
+
+        String beforeEncrtpy = apNo+"+"+curTime;
+        CryptUtil cryptUtil = new CryptUtil();
+        String link = cryptUtil.encrypt(beforeEncrtpy);
+
+        redisUtil.setDataExpire(link, apNo, 1000);
+
+        return ResponseEntity.ok(link);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/add-user", method=RequestMethod.GET)
+    @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
+    public AppointmentResponse addUser(@RequestParam String link, @RequestParam String userId) throws Exception {
+
+        String apNo = redisUtil.getData(link);
+        Long no = Long.parseLong(apNo);
+        if(apNo == null) return new CustomException(ErrorCode.INVALID_LINK);
+
         //1. user id로 user no 검색
         User u = userService.getUserById(userId);
 
@@ -95,7 +118,8 @@ public class AppointmentController {
 
             //3. uaMap에 insert
             uaMapService.setUAMap(no, u.getUserNo(), false);
-        }else throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+        } else throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+
         //4. no 해당하는 약속정보 가져와서 return
         Appointment a = appointmentService.getAppointment(no);
 
