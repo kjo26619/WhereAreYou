@@ -29,6 +29,7 @@ public enum ErrorCode {
     EMPTY_PASSWORD(HttpStatus.BAD_REQUEST, "C013", "패스워드가 비어있습니다"),
     EMPTY_USER_ID(HttpStatus.BAD_REQUEST, "C014", "유저 ID가 비어있습니다"),
     INVALID_LINK(HttpStatus.BAD_REQUEST, "C015", "만료되거나 잘못된 invite Code입니다."),
+    UNAUTHORIZED_APPOINTMENT(HttpStatus.UNAUTHORIZED, "C016", "Appointment Owner 권한이 없습니다."),
     ;
 
     private HttpStatus httpStatus;

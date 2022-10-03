@@ -41,6 +41,8 @@ public class UAMapService {
 
     public List<Long> findUserListByAppointmentNo(Long no) { return uaMapRepository.findUserListByAppointmentNo(no);   }
 
+    public Long findOwnerNoByAppointmentNo(Long appointmentNo) { return uaMapRepository.findOwnerNoByAppointmentNo(appointmentNo); }
+
     public List<Long> findOwnerAppointmentNoByUserNo(Long userNo) { return uaMapRepository.findOwnerAppointmentByUserNo(userNo); }
 
     public int deleteUAMapByAppointmentNo(Long appointmentNo) throws Exception{

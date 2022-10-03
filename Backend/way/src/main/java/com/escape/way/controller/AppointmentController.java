@@ -89,6 +89,13 @@ public class AppointmentController {
     @RequestMapping(value = "/link", method=RequestMethod.GET)
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
     public ResponseEntity<String> createLink(@RequestParam Long no, @RequestParam String userId) throws Exception {
+        User u = userService.getUserById(userId);
+        Appointment a = appointmentService.getAppointment(no);
+
+        if (u.getUserNo() != uaMapService.findOwnerNoByAppointmentNo(no)) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_APPOINTMENT);
+        }
+
         String apNo = no.toString();
         String curTime = dateTimeUtil.dateTime2String(ZonedDateTime.now(ZoneId.of("UTC")));
 
@@ -108,7 +115,7 @@ public class AppointmentController {
 
         String apNo = redisUtil.getData(link);
         Long no = Long.parseLong(apNo);
-        if(apNo == null) return new CustomException(ErrorCode.INVALID_LINK);
+        if(apNo == null) throw new CustomException(ErrorCode.INVALID_LINK);
 
         //1. user id로 user no 검색
         User u = userService.getUserById(userId);
@@ -123,9 +130,7 @@ public class AppointmentController {
         //4. no 해당하는 약속정보 가져와서 return
         Appointment a = appointmentService.getAppointment(no);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        String appointmentTime = a.getTime().format(formatter);
+        String appointmentTime = dateTimeUtil.dateTime2String(a.getTime());
         AppointmentResponse appointment =
                 new AppointmentResponse(a.getAppointmentNo(), a.getName(), a.getPlaceName(),
                         a.getLatitude(), a.getLongitude(), appointmentTime);
