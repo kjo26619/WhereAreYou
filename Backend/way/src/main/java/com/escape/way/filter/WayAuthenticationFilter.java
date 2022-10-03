@@ -32,22 +32,20 @@ public class WayAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Enumeration<String> params = request.getParameterNames();
-        String accessToken = null;
-        String userId = null;
+        String accessTokenPrefix = request.getHeader("Authorization");
 
+        System.out.println("Bearer AccessToken : " + accessTokenPrefix);
 
-        while(params.hasMoreElements()) {
-            String key = params.nextElement();
-            if(key.equals("AccessToken")) {
-                accessToken = request.getParameter(key);
-                System.out.println(key);
-                System.out.println(accessToken);
-            }
+        if (accessTokenPrefix == null || !accessTokenPrefix.startsWith("Bearer")) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
+        String accessToken = accessTokenPrefix.replace("Bearer ", "");
+        String userId = null;
+
         try {
-            if (accessToken != null) {
+            if (accessToken != null || !accessToken.isEmpty()) {
                 System.out.println(accessToken);
                 userId = tokenUtil.getUsernameFromToken(accessToken);
                 System.out.println("userId : " + userId);

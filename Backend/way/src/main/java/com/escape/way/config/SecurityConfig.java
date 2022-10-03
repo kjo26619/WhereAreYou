@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -48,20 +49,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement() //(4)
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-//                .and()
-//                .authorizeRequests().antMatchers("/api/user/login", "/api/user/join", "/api/user/reAuth").permitAll()
-//                .anyRequest().authenticated()
+                .and()
+                .authorizeRequests().antMatchers("/api/user/join", "/api/user/login", "/api/user/reAuth").permitAll()
+                .anyRequest().authenticated()
 
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
 
-//                .and()
-//                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
-//
-//        http.
-//                addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+                .and()
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
+
+        http.
+                addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
