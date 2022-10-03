@@ -54,7 +54,7 @@ public class UserController {
   private DateTimeUtil dateTimeUtil;
 
   //가입
-  @RequestMapping(value = "/", method = RequestMethod.POST)
+  @RequestMapping(value = "/join", method = RequestMethod.POST)
   @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
   public ResponseEntity<String> join(@RequestBody UserRegisterRequest userInfo) throws RuntimeException{
 
@@ -119,7 +119,7 @@ public class UserController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/reAuth", method= RequestMethod.POST)
+  @RequestMapping(value = "/re-auth", method= RequestMethod.POST)
   @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
   public ResponseEntity<?> createRefreshToAccessToken(@RequestBody HashMap<String, String> RefreshToken) throws RuntimeException {
     String refreshToken = RefreshToken.get("RefreshToken");
