@@ -4,10 +4,7 @@ import com.escape.way.config.CryptUtil;
 import com.escape.way.config.DateTimeUtil;
 import com.escape.way.config.RedisUtil;
 import com.escape.way.config.logging.LogEntry;
-import com.escape.way.dto.AppointmentResponse;
-import com.escape.way.dto.AppointmentUserListResponse;
-import com.escape.way.dto.CreateAppointmentRequest;
-import com.escape.way.dto.UpdateTimeRequest;
+import com.escape.way.dto.*;
 import com.escape.way.error.CustomException;
 import com.escape.way.error.ErrorCode;
 import com.escape.way.model.Appointment;
@@ -102,19 +99,21 @@ public class AppointmentController {
         CryptUtil cryptUtil = new CryptUtil();
         String link = cryptUtil.encrypt(beforeEncrtpy);
 
-        redisUtil.setDataExpire(link, apNo, 1000);
+        redisUtil.setDataExpire("link:" + link, apNo, 1000);
 
         return ResponseEntity.ok(link);
     }
 
     @ResponseBody
-    @RequestMapping(value = "/add-user", method=RequestMethod.GET)
+    @RequestMapping(value = "/add-user", method=RequestMethod.POST)
     @LogEntry(showArgs = true, showResult = true, unit = ChronoUnit.MILLIS)
-    public AppointmentResponse addUser(@RequestParam String link, @RequestParam String userId) throws Exception {
+    public AppointmentResponse addUser(@RequestBody GetLinkRequest body) throws Exception {
+        String link = body.getLink();
+        String userId = body.getUserId();
 
-        String apNo = redisUtil.getData(link);
-        Long no = Long.parseLong(apNo);
+        String apNo = redisUtil.getData("link:" + link);
         if(apNo == null) throw new CustomException(ErrorCode.INVALID_LINK);
+        Long no = Long.parseLong(apNo);
 
         //1. user id로 user no 검색
         User u = userService.getUserById(userId);

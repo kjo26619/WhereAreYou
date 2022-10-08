@@ -111,7 +111,7 @@ public class UserController {
     final String accessToken = tokenUtil.generateAccessToken(user);
     final String refreshToken = tokenUtil.generateRefreshToken(user);
 
-    redisUtil.setDataExpire(refreshToken, user.getUserId(), tokenUtil.REFRESH_TOKEN_VALIDATION);
+    redisUtil.setDataExpire("token:" + refreshToken, user.getUserId(), tokenUtil.REFRESH_TOKEN_VALIDATION);
 
     userService.setUpdateTime(user.getUserNo(), ZonedDateTime.now(ZoneId.of("UTC")));
 
@@ -126,7 +126,7 @@ public class UserController {
     String userId = null;
 
     try {
-      userId = redisUtil.getData(refreshToken);
+      userId = redisUtil.getData("token:" + refreshToken);
 
       if (userId.equals(tokenUtil.getUsernameFromToken(refreshToken))) {
         User user = userService.loadUserByUsername(userId);
