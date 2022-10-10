@@ -1,23 +1,24 @@
 import axios from 'axios';
-import API from '../axios/Api'
+import * as API from  '../axios/API'
 import * as types from './ActionTypes';
 
-const BASE_URL = API.BASE_URL;
+const BASE_URL = API.BASE_URL + "api/user";
 
 /* LOGIN */
 export function loginRequest(userId, password) {
-    const url = BASE_URL + '/auth';
-    console.log('[login request] url :', url, 'id : ', userId, 'pw : ', password);
+    const url = BASE_URL + '/login';
+    console.log('[login request] url :', url, 'userId : ', userId, 'password : ', password);
     const userData = {
         userId: userId,
-        pw: password
+        password: password
     }
     return (dispatch) => {
         // Inform Login API is starting
         dispatch(login());
-
+        
         // API REQUEST
-        return axios.post(url, null, { params : userData }, { Credential: true })
+        return API.post('/user/login', userData, {Credential: true})
+        // return axios.post(url, userData, { Credential: true })
             .then((response) => {
                 // SUCCEED
                 dispatch(loginSuccess(userId));
@@ -95,7 +96,7 @@ export function getStatusRequest() {
         // inform Get Status API is starting
         dispatch(getStatus());
 
-        const url = BASE_URL + '/user'
+        const url = BASE_URL + '/exists'
         return axios.get(url)
             .then((response) => {
                 dispatch(getStatusSuccess(response.data.info.username));

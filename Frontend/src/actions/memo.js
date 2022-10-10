@@ -7,8 +7,9 @@ import {
     MEMO_LIST_FAILURE
 } from './ActionTypes';
 import axios from 'axios';
+import * as API from '../axios/API'
 
-const baseURL = "http://localhost:8081/api";
+const baseURL = API.BASE_URL + "api";
 
 /* MEMO POST */
 export function memoPostRequest(contents) {
@@ -62,7 +63,7 @@ export function memoListRequest(isInitial, listType, id, username) {
         // inform memo list API is starting
         dispatch(memoList());
         
-        let url = baseURL + "/appointment?no=1";
+        let url = baseURL + "/appointment/test/lists";
         
         /* url setup depending on parameters,
            to  be implemented.. */

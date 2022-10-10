@@ -1,6 +1,7 @@
 import axios from 'axios';
+import * as API from './API';
 
-const baseURL = "http://localhost:8080/api";
+const baseURL = "/api";
 
 export function getAppointment(data, setData){
     const url = baseURL + "/appointment?no=1";

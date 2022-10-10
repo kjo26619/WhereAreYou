@@ -5,9 +5,9 @@ import { PropTypes } from 'prop-types';
 function AppointmentList({data, currentUser}){
     const mapToComponents = data =>{
         return data.map((appointment, i) =>{
-            return (<Appointment data={appointment} 
-                owenership={(appointment.writer === currentUser)}
-                key={appointment._id}
+            return (
+            <Appointment data={appointment} 
+                key={appointment.appointmentNo}
             />);
         });
     };

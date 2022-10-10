@@ -1,10 +1,11 @@
 //import React, { useState } from 'react';
 import axios from 'axios';
+import API from './API';
 
-const baseURL = "http://localhost:8080/api";
+const baseURL = API.BASE_URL + "/api/user";
 
 export function getUser(){
-    const url = baseURL + "/user";
+    const url = baseURL + "/exists";
 
     axios.get(url)
     .then((res) => {

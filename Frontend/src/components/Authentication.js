@@ -24,12 +24,10 @@ function Authentication({ mode, onLogin, onRegister }) {
 
     const onPwChange = (e) => {
         setData((prevState) => { return { ...prevState, pw: e.target.value } });
-        console.log(userData);
     }
 
     const onIdChange = (e) => {
         setData((prevState) => { return { ...prevState, id: e.target.value } });
-        console.log(userData);
     }
 
     const kakaoLogin = (e) => {

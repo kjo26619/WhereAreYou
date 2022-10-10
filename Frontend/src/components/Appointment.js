@@ -50,11 +50,12 @@ function Appointment({ data, owenership }) {
     const memoView = (
         <div className="card">
             <div className="info">
-                <a className="username">{data.writer}</a> wrote a log · <TimeAgo date={data.date.created} />
-                {owenership ? dropDownMenu : undefined}
+                <a className="username">{data.name}</a> wrote a log · <TimeAgo date={data.time} />
+                {/* {owenership ? dropDownMenu : undefined} */}
+                <button>선택</button>
             </div>
             <div className="card-content">
-                <div>{data.contents.name}</div>
+                <div>{data.placeName}</div>
             </div>
             <div className="footer">
                 <i className="material-icons log-footer-icon star icon-button">star</i>
