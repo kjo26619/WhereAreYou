@@ -1,6 +1,7 @@
 package com.escape.way.model;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import javax.persistence.*;
@@ -37,6 +38,9 @@ public class User implements Serializable, UserDetails {
     @Column(unique = true)
     private String userId;
 
+    @Column
+    private ZonedDateTime updateTime;
+
     @OneToMany(mappedBy = "user")
     private List<UAMap> uamaps = new ArrayList<UAMap>();
 
@@ -54,6 +58,9 @@ public class User implements Serializable, UserDetails {
         this.kakaoId = kakaoId;
     }
 
+    public ZonedDateTime getUpdateTime() { return this.updateTime; }
+
+    public void setUpdateTime(ZonedDateTime updateTime) { this.updateTime = updateTime; }
     @Override
     public String toString() {
         return this.name + ", " + this.pw + ", " + this.userId + ", " + this.latitude + ", " + this.longitude + ", " + this.kakaoId;

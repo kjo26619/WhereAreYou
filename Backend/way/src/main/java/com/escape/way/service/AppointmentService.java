@@ -1,25 +1,15 @@
 package com.escape.way.service;
 
-import com.escape.way.dto.AppointmentRe;
 import com.escape.way.error.CustomException;
 import com.escape.way.error.ErrorCode;
 import com.escape.way.model.Appointment;
 import com.escape.way.model.User;
 import com.escape.way.repository.AppointmentRepository;
-import com.escape.way.repository.UAMapRepository;
-import com.escape.way.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -55,28 +45,55 @@ public class AppointmentService {
     public Long createAppointment(Appointment appointment){
         Appointment ap = appointmentRepository.save(appointment);
         Long appointmentNo = ap.getAppointmentNo();
-        System.out.println(appointmentNo);
+
         return appointmentNo;
     }
 
-    public int updateAppointment(Long id, Appointment appointment){
-        Optional<Appointment> oAp = appointmentRepository.findById(id);
-        if(oAp.isPresent()) {
-            appointmentRepository.save(oAp.get());
-            return 1;
-        }
-        return 0;
-    }
-    public int deleteAppointment(Long id) {
-        Optional<Appointment> oAp = appointmentRepository.findById(id);
-        if (oAp.isPresent()) {
-            appointmentRepository.delete(oAp.get());
-            return 1;
-        }
-        return 0;
+    public void updateAppointment(Long no, Appointment updateAppointment) throws Exception {
+        Appointment appointment = getAppointment(no);
+
+        if(appointment != null)
+            appointmentRepository.save(updateAppointment);
     }
 
-    public List<Appointment> getAppointmentList(){
-        return appointmentRepository.findAll();
+    public boolean deleteAppointment(Long no) throws Exception {
+        Appointment appointment = getAppointment(no);
+
+        if(appointment != null) {
+            appointmentRepository.deleteById(no);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public void updateAppointmentTime(Long no, ZonedDateTime date) throws Exception {
+        Appointment appointment = getAppointment(no);
+
+        if(appointment != null)
+            appointmentRepository.setTime(no, date);
+    }
+
+    public void setUpdateTime(Long no, ZonedDateTime date) throws Exception {
+        Appointment appointment = getAppointment(no);
+
+        if(appointment != null)
+            appointmentRepository.setUpdateTime(no, date);
+    }
+
+    public List<User> getAppointmentUserList(Long no) throws Exception {
+        List<User> userList = new ArrayList<>();
+        List<Long> userNoList = uaMapService.findUserListByAppointmentNo(no);
+
+        for (Iterator<Long> iter = userNoList.iterator(); iter.hasNext();) {
+            Long curNo = iter.next();
+
+            User u =userService.getUserByUserNo(curNo);
+
+            userList.add(u);
+        }
+
+        return userList;
     }
 }

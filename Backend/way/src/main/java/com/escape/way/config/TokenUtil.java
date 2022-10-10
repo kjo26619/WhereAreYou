@@ -5,7 +5,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -15,8 +14,8 @@ import java.util.function.Function;
 
 @Component
 public class TokenUtil {
-    public final static long ACCESS_TOKEN_VALIDATION = 1000L * 60 * 2;
-    public final static long REFRESH_TOKEN_VALIDATION = 1000L * 60 * 4;
+    public final static long ACCESS_TOKEN_VALIDATION = 1000L * 60 * 3;          // 3 min
+    public final static long REFRESH_TOKEN_VALIDATION = 1000L * 60 * 60 * 1;   // 1 hour
 
     final static public String ACCESS_TOKEN = "accessToken";
 

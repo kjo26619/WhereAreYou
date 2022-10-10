@@ -1,20 +1,12 @@
 package com.escape.way.service;
 
-import com.escape.way.config.logging.LogEntry;
-import com.escape.way.error.CustomException;
-import com.escape.way.error.ErrorCode;
 import com.escape.way.model.Appointment;
 import com.escape.way.model.UAMap;
 import com.escape.way.model.User;
-import com.escape.way.repository.AppointmentRepository;
 import com.escape.way.repository.UAMapRepository;
-import com.escape.way.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UAMapService {
@@ -22,12 +14,12 @@ public class UAMapService {
     @Autowired
     private UAMapRepository uaMapRepository;
 
-    public void setUAMap(Long appointmentNo, Long userNo){
+    public void setUAMap(Long appointmentNo, Long userNo, boolean owner){
         User u = new User();
         u.setUserNo(userNo);
         Appointment a = new Appointment();
         a.setAppointmentNo(appointmentNo);
-        UAMap uamap = new UAMap(u, a);
+        UAMap uamap = new UAMap(u, a, owner);
         uaMapRepository.save(uamap);
     }
 
@@ -45,5 +37,23 @@ public class UAMapService {
 
     public List<Long> getAppointmentNoListByUserNo(Long no) {
         return uaMapRepository.findAppointmentListByUserNo(no);
+    }
+
+    public List<Long> findUserListByAppointmentNo(Long no) { return uaMapRepository.findUserListByAppointmentNo(no);   }
+
+    public Long findOwnerNoByAppointmentNo(Long appointmentNo) { return uaMapRepository.findOwnerNoByAppointmentNo(appointmentNo); }
+
+    public List<Long> findOwnerAppointmentNoByUserNo(Long userNo) { return uaMapRepository.findOwnerAppointmentByUserNo(userNo); }
+
+    public int deleteUAMapByAppointmentNo(Long appointmentNo) throws Exception{
+        int deletedCnt = uaMapRepository.deleteUAMapByAppointmentNo(appointmentNo);
+
+        return deletedCnt;
+    }
+
+    public int deleteUAMapByUserNo(Long userNo) throws Exception{
+        int deletedCnt = uaMapRepository.deleteUAMapByUserNo(userNo);
+
+        return deletedCnt;
     }
 }

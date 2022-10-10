@@ -21,10 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
 import java.util.Arrays;
-import java.util.Collections;
 
 
 @Slf4j
@@ -52,20 +49,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement() //(4)
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-//                .and()
-//                .authorizeRequests().antMatchers("/api/auth", "/api/join", "/api/reAuth").permitAll()
-//                .anyRequest().authenticated()
+                .and()
+                .authorizeRequests().antMatchers("/api/user/join", "/api/user/login", "/api/user/re-auth").permitAll()
+                .anyRequest().authenticated()
 
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
 
-//                .and()
-//                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
-//
-//        http.
-//                addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+                .and()
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
+
+        http.
+                addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
