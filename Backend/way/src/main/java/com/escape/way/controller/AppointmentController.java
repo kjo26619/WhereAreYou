@@ -1,6 +1,6 @@
 package com.escape.way.controller;
 
-import com.escape.way.config.CryptUtil;
+import com.escape.way.config.Base64Util;
 import com.escape.way.config.DateTimeUtil;
 import com.escape.way.config.RedisUtil;
 import com.escape.way.config.logging.LogEntry;
@@ -95,10 +95,9 @@ public class AppointmentController {
         String apNo = no.toString();
         String curTime = dateTimeUtil.dateTime2String(ZonedDateTime.now(ZoneId.of("UTC")));
 
-        String beforeEncrtpy = apNo+"+"+curTime;
-        CryptUtil cryptUtil = new CryptUtil();
-        String link = cryptUtil.encrypt(beforeEncrtpy);
-
+        String beforeStr= apNo+" "+curTime;
+        Base64Util base64Util = new Base64Util();
+        String link = base64Util.encoding(beforeStr);
         redisUtil.setDataExpire("link:" + link, apNo, 1000);
 
         return ResponseEntity.ok(link);
@@ -114,6 +113,11 @@ public class AppointmentController {
         String apNo = redisUtil.getData("link:" + link);
         if(apNo == null) throw new CustomException(ErrorCode.INVALID_LINK);
         Long no = Long.parseLong(apNo);
+
+        //db랑 decoding 결과가 같은지 확인(인데 안해도 될거 같기도..)
+//        Base64Util base64Util = new Base64Util();
+//        String[] afterDecoding = base64Util.decoding(link).split(" ");
+//        if(!no.equals(Long.parseLong(afterDecoding[1]))) throw new CustomException(ErrorCode.NOT_MATCH_NO);
 
         //1. user id로 user no 검색
         User u = userService.getUserById(userId);
